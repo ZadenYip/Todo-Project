@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     constructor(private router: Router) {}
 
     ngOnInit(): void {
-        log.info('HomeComponent INIT');
+        log.info('HomeComponent initialized');
         this.reloadDecks();
     }
 
