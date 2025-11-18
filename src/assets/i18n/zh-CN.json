@@ -8,6 +8,11 @@
         "NEW_LEARNED": "今日已学新卡片"
       }
     },
+    "IMMERSE": {
+      "SUBTITLE": {
+        "HEADER": "字幕内容"
+      }
+    },
     "DETAIL": {
       "TITLE": "Detail page !",
       "BACK_TO_HOME": "Back to Home"
