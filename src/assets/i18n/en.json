@@ -8,6 +8,11 @@
         "NEW_LEARNED": "New Cards Learned Today"
       }
     },
+    "IMMERSE": {
+      "SUBTITLE": {
+        "HEADER": "Subtitle Content"
+      }
+    },
     "DETAIL": {
       "TITLE": "Detail page !",
       "BACK_TO_HOME": "Back to Home"
