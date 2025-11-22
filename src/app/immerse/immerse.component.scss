@@ -39,8 +39,28 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-left: 1px solid #ccc;
-  padding-left: 16px;
+  
+  // 新增样式：添加边框、圆角和内边距，形成圆角矩形
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 16px;
+  background-color: #fff; // 添加一个白色背景
+
+  .subtitle-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+  }
+
+  .subtitle-action-bar {
+    display: flex;
+    align-items: center;
+
+    input {
+      display: none;
+    }
+  }
 
   .subtitle-list, .subtitle-viewport {
     list-style: none;
@@ -103,6 +123,11 @@
 
   // 让这个覆盖层永远不拦截鼠标事件
   pointer-events: none;
+
+  // 隐藏文件输入框
+  input {
+    display: none;
+  }
 }
 
 // 当鼠标悬停在视频面板上时，只改变 overlay 的透明度
@@ -111,7 +136,7 @@
 }
 
 // “打开文件”按钮的样式
-.change-video-btn {
+.input-video-btn {
   position: absolute;
   top: 12px;
   right: 12px;
