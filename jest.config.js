@@ -12,4 +12,7 @@ module.exports = {
     ],
     '^.+\\.js$': 'babel-jest',
   },
+  setupFilesAfterEnv: [
+    '<rootDir>/setup-jest.ts'
+  ]
 };
