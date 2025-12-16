@@ -8,6 +8,13 @@
         "NEW_LEARNED": "New Cards Learned Today"
       }
     },
+    "IMMERSE": {
+      "SUBTITLE": {
+        "HEADER": "Subtitle Content",
+        "VIDEO_SELECTION": "Select Video File",
+        "SUBTITLE_SELECTION": "Select Subtitle File"
+      }
+    },
     "DETAIL": {
       "TITLE": "Detail page !",
       "BACK_TO_HOME": "Back to Home"

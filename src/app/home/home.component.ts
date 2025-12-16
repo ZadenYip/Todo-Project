@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { HomeService } from './home.service';
+import { HomeService } from './service/home.service';
 import { Observable, of } from 'rxjs';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { DataSource } from '@angular/cdk/table';
 import { DeckListItem } from './deck-list-item.model';
 import log from 'electron-log/renderer';
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     constructor(private router: Router) {}
 
     ngOnInit(): void {
-        log.info('HomeComponent INIT');
+        log.info('HomeComponent initialized');
         this.reloadDecks();
     }
 
