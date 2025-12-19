@@ -48,8 +48,8 @@ export class ImmerseComponent {
     constructor(private sanitizer: DomSanitizer) {}
 
     /**
-     * 选择文件后，方法会被调用。
-     * @param event - 文件选择事件
+     * Called after a file is selected.
+     * @param event - File selection event
      */
     onVideoSelected(event: Event): void {
         this.videoSrc = this.getURLFromInputElem(event, this.videoSrc, (file: File) => {
@@ -72,7 +72,7 @@ export class ImmerseComponent {
     getURLFromInputElem(event: Event, safeUrl: SafeUrl, handle?: (file: File) => void): SafeUrl {
         const input = event.target as HTMLInputElement;
 
-        // 确保用户确实选择了文件
+        // Ensure a file is selected
         if (input.files && input.files.length > 0) {
             const file = input.files[0];
             const objectUrl = URL.createObjectURL(file);
@@ -96,10 +96,10 @@ export class ImmerseComponent {
     }
 
     /**
-     * 加载完视频后自动播放
+     * Called when video metadata is loaded.
      */
     onVideoLoaded(): void {
-        // 使用 setTimeout 确保 video.src 已经更新完毕
+        // Use setTimeout to ensure video.src is fully updated
         setTimeout(() => {
             this.videoPlayer().nativeElement.play();
             log.info('Video playback started.');

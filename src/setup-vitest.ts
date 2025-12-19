@@ -1,9 +1,11 @@
 /**
- * 防止 ng test 下因为没初始化 log 而报错的问题
- * 因为在测试环境下，我们并不需要真正记录日志，
- * 所以这里我们用 vi.mock 来模拟 electron-log 模块，
- * 并提供空的实现。
+ * Prevent errors in ng test due to uninitialized log.
+ * Since we don't need to actually log in the test environment,
+ * we use vi.mock here to mock the electron-log module,
+ * providing empty implementations.
  */
+
+
 
 vi.mock('electron-log/renderer', () => ({
   info: vi.fn(),

@@ -36,8 +36,8 @@ describe('HomeService (Renderer Unit Test)', () => {
     });
 
     it('should query and correctly map the deck list from a mocked IPC call', async () => {
-        // 告诉被 mock 的 ipcRunSQL：当它被调用时，我们希望它返回什么假数据。
-        // 对应service.queryDeckList()内部调用的ipcRunSQL
+        // Tell the mocked ipcRunSQL what fake data we want it to return when called
+        // Corresponds to the ipcRunSQL call inside service.queryDeckList()
        ipcRunSQLMock.mockResolvedValue(MOCK_RAW_DECKS);
         const decks = await firstValueFrom(service.queryDeckList());
 
@@ -58,8 +58,7 @@ describe('HomeService (Renderer Unit Test)', () => {
         ipcRunSQLMock.mockResolvedValue([]);
         const decks = await firstValueFrom(service.queryDeckList());
 
-        // 断言
         expect(ipcRunSQLMock).toHaveBeenCalledTimes(1);
-        expect(decks).toEqual([]); // 期望得到一个空数组
+        expect(decks).toEqual([]); // Expect an empty array
     });
 });

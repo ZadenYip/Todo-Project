@@ -1,50 +1,50 @@
 // ==========================================
-// 1. 页面主容器 (Flexbox 布局)
+// 1. Main Container (Flexbox Layout)
 // ==========================================
 .immerse-container {
-  display: flex; // 关键：启用 Flexbox 布局
-  flex-direction: row; // 关键：让子元素（视频和字幕）水平排列
-  height: calc(100vh - 64px); // 占满屏幕高度 (假设顶部有 64px 的导航栏)
+  display: flex; // Key: Enable Flexbox layout
+  flex-direction: row; // Key: Arrange child elements (video and subtitles) horizontally
+  height: calc(100vh - 64px); // Occupy full screen height (assuming a 64px top navbar)
   padding: 16px;
-  gap: 16px; // 在视频和字幕之间创建间距
+  gap: 16px; // Create space between video and subtitles
   box-sizing: border-box;
 }
 
 // ==========================================
-// 2. 左侧视频面板
+// 2. Left Video Panel
 // ==========================================
 .video-panel {
-  flex: 1; // 关键：让视频面板占据所有可用的剩余空间
+  flex: 1; // Key: Let the video panel take up all available remaining space
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #000;
   border-radius: 8px;
   overflow: hidden;
-  position: relative; // 为 video-overlay 提供定位上下文
+  position: relative; // Provide positioning context for video-overlay
 
   video {
     width: 100%;
     height: 100%;
-    object-fit: contain; // 保持视频原始比例
+    object-fit: contain; // Maintain original video aspect ratio
   }
 }
 
 // ==========================================
-// 3. 右侧字幕面板
+// 3. Right Subtitle Panel
 // ==========================================
 .subtitle-panel {
-  width: 280px; // 关键：给字幕面板一个固定的宽度
-  flex-shrink: 0; // 防止在窗口缩小时被压缩
+  width: 280px; // Key: Give the subtitle panel a fixed width
+  flex-shrink: 0; // Prevent shrinking when the window is resized smaller
   display: flex;
   flex-direction: column;
   gap: 16px;
   
-  // 新增样式：添加边框、圆角和内边距，形成圆角矩形
+  // New styles: Add border, rounded corners, and padding to form a rounded rectangle
   border: 1px solid #e0e0e0;
   border-radius: 16px;
   padding: 16px;
-  background-color: #fff; // 添加一个白色背景
+  background-color: #fff; // Add a white background
 
   .subtitle-header {
     display: flex;
@@ -67,8 +67,8 @@
     list-style: none;
     padding: 0;
     margin: 0;
-    overflow-y: auto; // 如果字幕内容过长，允许滚动
-    flex-grow: 1; // 占据所有可用的垂直空间
+    overflow-y: auto; // If subtitle content is too long, allow scrolling
+    flex-grow: 1; // Occupy all available vertical space
 
     .subtitle-item {
       padding: 12px 8px;
@@ -81,10 +81,10 @@
       }
 
       &.active {
-        background-color: #e3f2fd; // 高亮样式
+        background-color: #e3f2fd; // Highlight style
       }
 
-      // 为 p 标签设置通用样式
+      // Common styles for p tags
       p {
         margin: 0;
         white-space: normal;
@@ -92,27 +92,27 @@
         line-height: 1.5;
       }
 
-      // 主字幕的样式
+      // Styles for primary subtitle
       .primary-text {
         font-size: 1em;
-        color: #212121; // 深色，更突出
-        margin-bottom: 4px; // 与副字幕之间留出一点间距
+        color: #212121; // Darker color for emphasis
+        margin-bottom: 4px; // Space between primary and secondary subtitles
       }
 
-      // 副字幕的样式
+      // Styles for secondary subtitle
       .secondary-text {
         font-size: 0.9em;
-        color: #757575; // 浅灰色，作为辅助
+        color: #757575; // Light gray, as auxiliary
       }
     }
   }
 }
 
 // ==========================================
-// 4. 视频悬停效果
+// 4. Video Hover Effect
 // ==========================================
 
-// 覆盖在视频上方的层
+// Overlay layer on top of the video
 .video-overlay {
   position: absolute;
   top: 0;
@@ -122,7 +122,7 @@
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 
-  // 让这个覆盖层永远不拦截鼠标事件
+  // Make this overlay never intercept mouse events
   pointer-events: none;
 
   // 隐藏文件输入框
@@ -131,12 +131,12 @@
   }
 }
 
-// 当鼠标悬停在视频面板上时，只改变 overlay 的透明度
+// When the mouse hovers over the video panel, only change the overlay's opacity
 .video-panel:hover .video-overlay {
   opacity: 1;
 }
 
-// “打开文件”按钮的样式
+// "Open File" button styles
 .input-video-btn {
   position: absolute;
   top: 12px;
@@ -144,6 +144,6 @@
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
 
-  // 关键修正 #2: 只为按钮本身开启鼠标事件响应
+  // Key fix #2: Enable pointer events only for the button itself
   pointer-events: auto;
 }
