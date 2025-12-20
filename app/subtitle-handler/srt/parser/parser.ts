@@ -73,7 +73,7 @@ export class Parser {
         this.tokenStream = new TokenStream(stream);
     }
 
-    public static createParser(stream: Readable): Readable {
+    public static createParser(stream: Readable): AsyncIterable<CueAST> {
         const parser = new Parser(stream);
         return Readable.from(parser.startParsing());
     }

@@ -81,7 +81,7 @@ describe('Subtitle Parser', () => {
 
 async function expectCueASTEqual(subtitleData: string, expected: CueAST[]) {
     const input: Readable = Readable.from([subtitleData]);
-    const parserStream: Readable = await Parser.createParser(input);
+    const parserStream: AsyncIterable<CueAST> = await Parser.createParser(input);
     const cues:CueAST[] = [];
     for await (const cue of parserStream) { 
         cues.push(cue);

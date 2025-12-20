@@ -11,7 +11,7 @@ describe('SRT Fixture Tests', () => {
             'utf-8'
         );
 
-        const parserStream:Readable  = Parser.createParser(subtitleData);
+        const parserStream: AsyncIterable<CueAST> = Parser.createParser(subtitleData);
         const cues: CueAST[] = [];
 
         for await (const cue of parserStream) {
