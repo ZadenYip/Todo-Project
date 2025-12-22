@@ -1,7 +1,6 @@
-import { createReadStream, readFile, readFileSync } from 'fs';
+import { createReadStream, readFileSync } from 'fs';
 import { CueAST, Parser, TimestampAST } from './parser/parser';
 import { resolve } from 'path';
-import { Readable } from 'stream';
 
 
 describe('SRT Fixture Tests', () => {
