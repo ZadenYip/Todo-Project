@@ -1,7 +1,6 @@
-import { createReadStream, readFile, readFileSync } from 'fs';
+import { createReadStream, readFileSync } from 'fs';
 import { CueAST, Parser, TimestampAST } from './parser/parser';
 import { resolve } from 'path';
-import { Readable } from 'stream';
 
 
 describe('SRT Fixture Tests', () => {
@@ -11,7 +10,7 @@ describe('SRT Fixture Tests', () => {
             'utf-8'
         );
 
-        const parserStream:Readable  = Parser.createParser(subtitleData);
+        const parserStream: AsyncIterable<CueAST> = Parser.createParser(subtitleData);
         const cues: CueAST[] = [];
 
         for await (const cue of parserStream) {
