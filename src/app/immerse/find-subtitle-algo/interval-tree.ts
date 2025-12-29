@@ -23,7 +23,7 @@ export class TreeNode<K, V> {
     }
 }
 
-export class IntervelTree<K, V> {
+export class IntervalTree<K, V> {
     root: TreeNode<K, V>;
     sentinel: TreeNode<K, V>;
     comparator: (a: K, b: K) => number;

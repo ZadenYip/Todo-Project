@@ -1,4 +1,4 @@
-import { IntervelTree, TreeNode } from "./intervel-tree";
+import { IntervalTree, TreeNode } from "./interval-tree";
 
 describe('IntervelTree', () => {
 
@@ -13,12 +13,12 @@ describe('IntervelTree', () => {
     }
 
     it('should create an instance', () => {
-        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        let tree = new IntervalTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
         expect(tree).toBeTruthy();
     });
 
     it('should maintain red-black properties after insertions', () => {
-        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        let tree = new IntervalTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
         const elementsToInsert = [new Intervel(10, 20), new Intervel(15, 25), new Intervel(30, 40), new Intervel(5, 15), new Intervel(25, 35)];
 
         for (let element of elementsToInsert) {
@@ -30,7 +30,7 @@ describe('IntervelTree', () => {
     });
 
     it('should search correctly when intervals are single points', () => {
-        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        let tree = new IntervalTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
         const elementsToInsert = [new Intervel(50, 50), new Intervel(30, 30), new Intervel(70, 70), new Intervel(20, 20), new Intervel(40, 40), new Intervel(60, 60), new Intervel(80, 80)];
         for (let element of elementsToInsert) {
             tree.insert(element.low, element.high, element.high);
@@ -45,7 +45,7 @@ describe('IntervelTree', () => {
     });
 
     it('should search correctly with overlapping intervals', () => {
-        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        let tree = new IntervalTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
         const elementsToInsert = [new Intervel(10, 20), new Intervel(30, 40), new Intervel(50, 60)];
         for (let element of elementsToInsert) {
             tree.insert(element.low, element.high, element.high);
@@ -84,7 +84,7 @@ describe('IntervelTree', () => {
     });
 
     test('randomized insert and search test with single points', () => {
-        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        let tree = new IntervalTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
         const elementsToInsert = [];
         const numElements = 10000;
         for (let i = 0; i < numElements; i++) {
@@ -104,14 +104,14 @@ describe('IntervelTree', () => {
 });
 
 // invariant: root is black
-function rootIsBlack(tree: IntervelTree<number, number>) {
+function rootIsBlack(tree: IntervalTree<number, number>) {
     if (tree.root) {
         expect(tree.root.color).toBeFalsy();
     }
 }
 
 // invariant: red node has black children
-function redNodeHasBlackChildren(tree: IntervelTree<number, number>) {
+function redNodeHasBlackChildren(tree: IntervalTree<number, number>) {
     let deque: TreeNode<number, number>[] = [];
     deque.push(tree.root);
     // BFS
@@ -133,7 +133,7 @@ function redNodeHasBlackChildren(tree: IntervelTree<number, number>) {
 }
 
 // invariant: all paths from a node to its descendant leaves have the same number of black nodes
-function blackHeightConsistency(tree: IntervelTree<number, number>) {
+function blackHeightConsistency(tree: IntervalTree<number, number>) {
 
     function isSentinel(node: TreeNode<number, number>): boolean {
         return node.left === node && node.right === node;
