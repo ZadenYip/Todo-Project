@@ -1,15 +1,17 @@
-export class TreeNode {
+export class TreeNode<K, V> {
     /**
      * True for red, false for black
      */
-    public key: number;
+    public key: K;
+    public value: V;
     public color: boolean;
-    public parent: TreeNode;
-    public left: TreeNode;
-    public right: TreeNode;
+    public parent: TreeNode<K, V>;
+    public left: TreeNode<K, V>;
+    public right: TreeNode<K, V>;
 
-    constructor() {
-        this.key = Number.NaN;
+    constructor(key: K, value: V) {
+        this.key = key;
+        this.value = value;
         this.color = false;
         this.parent = this;
         this.left = this;
@@ -17,12 +19,21 @@ export class TreeNode {
     }
 }
 
-export class RedBlackTree {
-    root: TreeNode;
-    sentinel: TreeNode;
+export class RedBlackTree<K, V> {
+    root: TreeNode<K, V>;
+    sentinel: TreeNode<K, V>;
+    comparator: (a: K, b: K) => number;
 
-    constructor() {
-        this.sentinel = new TreeNode();
+    /**
+     * 
+     * @param sentinelKey 
+     * @param sentinelValue 
+     * @param comparator - return <0 if a<b, 0 if a==b, >0 if a>b
+     * 
+     */
+    constructor(sentinelKey: K, sentinelValue: V, comparator: (a: K, b: K) => number) {
+        this.sentinel = new TreeNode(sentinelKey, sentinelValue);
+        this.comparator = comparator;
         this.sentinel.color = false;
         this.sentinel.parent = this.sentinel;
         this.sentinel.left = this.sentinel;
@@ -30,12 +41,13 @@ export class RedBlackTree {
         this.root = this.sentinel;
     }
 
-    search(key: number): TreeNode | null {
-        let cur: TreeNode = this.root;
+    search(key: K): TreeNode<K, V> | null {
+        let cur = this.root;
         while (cur !== this.sentinel) {
-            if (key === cur.key) {
+            const cmp = this.comparator(key, cur.key);
+            if (cmp === 0) {
                 return cur;
-            } else if (key < cur.key) {
+            } else if (cmp < 0) {
                 cur = cur.left;
             } else {
                 cur = cur.right;
@@ -44,26 +56,28 @@ export class RedBlackTree {
         return null;
     }
 
-    insert(elementKey: number): void {
-        let cur: TreeNode = this.root;
+    insert(key: K, value: V): void {
+        let cur = this.root;
         let traillingPointer = this.sentinel;
         while (cur !== this.sentinel) {
             traillingPointer = cur;
-            if (elementKey < cur.key) {
+            const cmp = this.comparator(key, cur.key);
+            if (cmp < 0) {
                 cur = cur.left;
             } else {
                 cur = cur.right;
             }
         }
         // Now cur is null and traillingPointer is the parent
-        const newNode = new TreeNode();
-        newNode.key = elementKey;
+        const newNode = new TreeNode(key, value);
+        newNode.key = key;
         newNode.parent = traillingPointer;
+        const cmp = this.comparator(key, traillingPointer.key);
 
         if (traillingPointer === this.sentinel) {
             // Tree was empty
             this.root = newNode;
-        } else if (elementKey < traillingPointer.key) {
+        } else if (cmp < 0) {
             // Insert as left child
             traillingPointer.left = newNode;
         } else {
@@ -78,7 +92,7 @@ export class RedBlackTree {
         this.fixInsert(newNode);
     }
 
-    fixInsert(fixNode: TreeNode): void {
+    private fixInsert(fixNode: TreeNode<K, V>): void {
         while (fixNode.parent.color) {
             if (fixNode.parent === fixNode.parent.parent.left) {
                 // Parent is a left child
@@ -133,7 +147,7 @@ export class RedBlackTree {
         this.root.color = false;
     }
 
-    leftRotate(x: TreeNode): void {
+    leftRotate(x: TreeNode<K, V>): void {
         // Before:
         //           P
         //           |
@@ -162,7 +176,7 @@ export class RedBlackTree {
         x.parent = y;
     }
 
-    rightRotate(x: TreeNode): void {
+    rightRotate(x: TreeNode<K, V>): void {
         // Before:
         //           P
         //           |
