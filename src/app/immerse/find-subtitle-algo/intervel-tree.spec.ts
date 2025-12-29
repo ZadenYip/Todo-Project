@@ -1,79 +1,101 @@
-import { RedBlackTree, TreeNode } from "./intervel-tree";
+import { IntervelTree, TreeNode } from "./intervel-tree";
 
 describe('IntervelTree', () => {
 
+    class Intervel {
+        low: number;
+        high: number;
+
+        constructor(low: number, high: number) {
+            this.low = low;
+            this.high = high;
+        }
+    }
+
     it('should create an instance', () => {
-        let tree = new RedBlackTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
         expect(tree).toBeTruthy();
     });
 
     it('should maintain red-black properties after insertions', () => {
-        let tree = new RedBlackTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
-        const elementsToInsert = [10, 20, 30, 15, 25, 5, 1];
-        
+        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        const elementsToInsert = [new Intervel(10, 20), new Intervel(15, 25), new Intervel(30, 40), new Intervel(5, 15), new Intervel(25, 35)];
+
         for (let element of elementsToInsert) {
-            tree.insert(element, element);
+            tree.insert(element.low, element.high, element.high);
             rootIsBlack(tree);
             redNodeHasBlackChildren(tree);
             blackHeightConsistency(tree);
         }
     });
 
-    it('search test', () => {
-        let tree = new RedBlackTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
-        const elementsToInsert = [50, 30, 70, 20, 40, 60, 80];
+    it('should search correctly when intervals are single points', () => {
+        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        const elementsToInsert = [new Intervel(50, 50), new Intervel(30, 30), new Intervel(70, 70), new Intervel(20, 20), new Intervel(40, 40), new Intervel(60, 60), new Intervel(80, 80)];
         for (let element of elementsToInsert) {
-            tree.insert(element, element);
+            tree.insert(element.low, element.high, element.high);
         }
         for (let element of elementsToInsert) {
-            const result = tree.search(element);
+            const result = tree.search(element.low, element.high);
             expect(result).not.toBeNull();
-            expect(result!.key).toBe(element);
+            expect(result!.low).toBe(element.low);
+            expect(result!.high).toBe(element.high);
         }
-        expect(tree.search(-1)).toBeNull();
+        expect(tree.search(-1, -1)).toBeNull();
     });
 
-    test('performance test for large number of search', () => {
-        let tree = new RedBlackTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
-        const elementsToInsert = [];
-        const numElements = 10000;
-        for (let i = 0; i < numElements; i++) {
-            elementsToInsert.push(i);
-            tree.insert(i, i);
+    it('should search correctly with overlapping intervals', () => {
+        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+        const elementsToInsert = [new Intervel(10, 20), new Intervel(30, 40), new Intervel(50, 60)];
+        for (let element of elementsToInsert) {
+            tree.insert(element.low, element.high, element.high);
         }
 
-        // compare tree search with linear search
-        const startTime = performance.now();
-        for (let i = 0; i < numElements; i++) {
-            const treeResult = tree.search(i);
-        }
-        const endTime = performance.now();
-        const treeSearchTime = endTime - startTime;
-        const linearStartTime = performance.now();
-        for (let i = 0; i < numElements; i++) {
-            const linearResult = elementsToInsert.find(x => x === i);
-        }
-        const linearEndTime = performance.now();
-        const linearSearchTime = linearEndTime - linearStartTime;
+        let result = tree.search(0, 9);
+        expect(result).toBeNull();
 
-        console.log(`Tree search time: ${treeSearchTime} ms`);
-        console.log(`Linear search time: ${linearSearchTime} ms`);
-        expect(treeSearchTime).toBeLessThan(linearSearchTime);
+        result = tree.search(0, 10);
+        expect(result).not.toBeNull();
+        expect(result!.low).toBe(10);
+        expect(result!.high).toBe(20);
+
+        result = tree.search(10, 10);
+        expect(result).not.toBeNull();
+        expect(result!.low).toBe(10);
+        expect(result!.high).toBe(20);
+        
+        result = tree.search(5, 15);
+        expect(result).not.toBeNull();
+        expect(result!.low).toBe(10);
+        expect(result!.high).toBe(20);
+
+        result = tree.search(10, 20);
+        expect(result).not.toBeNull();
+        expect(result!.low).toBe(10);
+        expect(result!.high).toBe(20);
+
+        result = tree.search(15, 25);
+        expect(result).not.toBeNull();
+        expect(result!.low).toBe(10);
+        expect(result!.high).toBe(20);
+
+        result = tree.search(70, 80);
+        expect(result).toBeNull();
     });
 
-    test('randomized insert and search test', () => {
-        let tree = new RedBlackTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
+    test('randomized insert and search test with single points', () => {
+        let tree = new IntervelTree<number, number>(Number.NEGATIVE_INFINITY, Number.NEGATIVE_INFINITY, (a, b) => a - b);
         const elementsToInsert = [];
         const numElements = 10000;
         for (let i = 0; i < numElements; i++) {
             const randomElement = Math.floor(Math.random() * 10000);
-            elementsToInsert.push(randomElement);
-            tree.insert(randomElement, randomElement);
+            elementsToInsert.push(new Intervel(randomElement, randomElement));
+            tree.insert(randomElement, randomElement, randomElement);
         }
         for (let element of elementsToInsert) {
-            const result = tree.search(element);
+            const result = tree.search(element.low, element.high);
             expect(result).not.toBeNull();
-            expect(result!.key).toBe(element);
+            expect(result!.low).toBe(element.low);
         }
         rootIsBlack(tree);
         redNodeHasBlackChildren(tree);
@@ -82,14 +104,14 @@ describe('IntervelTree', () => {
 });
 
 // invariant: root is black
-function rootIsBlack(tree: RedBlackTree<number, number>) {
+function rootIsBlack(tree: IntervelTree<number, number>) {
     if (tree.root) {
         expect(tree.root.color).toBeFalsy();
     }
 }
 
 // invariant: red node has black children
-function redNodeHasBlackChildren(tree: RedBlackTree<number, number>) {
+function redNodeHasBlackChildren(tree: IntervelTree<number, number>) {
     let deque: TreeNode<number, number>[] = [];
     deque.push(tree.root);
     // BFS
@@ -111,7 +133,7 @@ function redNodeHasBlackChildren(tree: RedBlackTree<number, number>) {
 }
 
 // invariant: all paths from a node to its descendant leaves have the same number of black nodes
-function blackHeightConsistency(tree: RedBlackTree<number, number>) {
+function blackHeightConsistency(tree: IntervelTree<number, number>) {
 
     function isSentinel(node: TreeNode<number, number>): boolean {
         return node.left === node && node.right === node;

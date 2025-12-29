@@ -2,24 +2,28 @@ export class TreeNode<K, V> {
     /**
      * True for red, false for black
      */
-    public key: K;
+    public low: K;
+    public high: K;
     public value: V;
     public color: boolean;
     public parent: TreeNode<K, V>;
+    public max: K;
     public left: TreeNode<K, V>;
     public right: TreeNode<K, V>;
 
-    constructor(key: K, value: V) {
-        this.key = key;
+    constructor(low: K, high: K, value: V) {
+        this.low = low;
+        this.high = high;
         this.value = value;
         this.color = false;
         this.parent = this;
+        this.max = high;
         this.left = this;
         this.right = this;
     }
 }
 
-export class RedBlackTree<K, V> {
+export class IntervelTree<K, V> {
     root: TreeNode<K, V>;
     sentinel: TreeNode<K, V>;
     comparator: (a: K, b: K) => number;
@@ -32,7 +36,7 @@ export class RedBlackTree<K, V> {
      * 
      */
     constructor(sentinelKey: K, sentinelValue: V, comparator: (a: K, b: K) => number) {
-        this.sentinel = new TreeNode(sentinelKey, sentinelValue);
+        this.sentinel = new TreeNode(sentinelKey, sentinelKey, sentinelValue);
         this.comparator = comparator;
         this.sentinel.color = false;
         this.sentinel.parent = this.sentinel;
@@ -41,27 +45,30 @@ export class RedBlackTree<K, V> {
         this.root = this.sentinel;
     }
 
-    search(key: K): TreeNode<K, V> | null {
+    search(intLow: K, intHigh: K): TreeNode<K, V> | null {
         let cur = this.root;
-        while (cur !== this.sentinel) {
-            const cmp = this.comparator(key, cur.key);
-            if (cmp === 0) {
-                return cur;
-            } else if (cmp < 0) {
+        while (cur !== this.sentinel && !this.isOverlap(cur.low, cur.high, intLow, intHigh)) {
+            const cmp = this.comparator(cur.left.max, intLow);
+            if (cur.left !== this.sentinel && cmp >= 0) {
                 cur = cur.left;
             } else {
                 cur = cur.right;
             }
         }
-        return null;
+        return cur === this.sentinel ? null : cur;
     }
 
-    insert(key: K, value: V): void {
+    private isOverlap(aIntLow: K, aIntHigh: K, bIntLow: K, bIntHigh: K): boolean {
+        return this.comparator(aIntLow, bIntHigh) <= 0 && this.comparator(bIntLow, aIntHigh) <= 0;
+    }
+
+    insert(intLow: K, intHigh: K, value: V): void {
         let cur = this.root;
         let traillingPointer = this.sentinel;
         while (cur !== this.sentinel) {
             traillingPointer = cur;
-            const cmp = this.comparator(key, cur.key);
+            cur.max = this.maxKey(cur.max, intHigh);
+            const cmp = this.comparator(intLow, cur.low);
             if (cmp < 0) {
                 cur = cur.left;
             } else {
@@ -69,10 +76,9 @@ export class RedBlackTree<K, V> {
             }
         }
         // Now cur is null and traillingPointer is the parent
-        const newNode = new TreeNode(key, value);
-        newNode.key = key;
+        const newNode = new TreeNode(intLow, intHigh, value);
         newNode.parent = traillingPointer;
-        const cmp = this.comparator(key, traillingPointer.key);
+        const cmp = this.comparator(intLow, traillingPointer.low);
 
         if (traillingPointer === this.sentinel) {
             // Tree was empty
@@ -89,7 +95,18 @@ export class RedBlackTree<K, V> {
         newNode.right = this.sentinel;
         // New node must be red
         newNode.color = true;
+        newNode.max = intHigh;
         this.fixInsert(newNode);
+    }
+
+    private maxKey(...keys: K[]): K {
+        let maxKey = keys[0];
+        for (let i = 1; i < keys.length; i++) {
+            if (this.comparator(maxKey, keys[i]) < 0) {
+                maxKey = keys[i];
+            }
+        }
+        return maxKey;
     }
 
     private fixInsert(fixNode: TreeNode<K, V>): void {
@@ -148,14 +165,6 @@ export class RedBlackTree<K, V> {
     }
 
     leftRotate(x: TreeNode<K, V>): void {
-        // Before:
-        //           P
-        //           |
-        //           x
-        //         /   \
-        //       T1     y
-        //             / \
-        //           T2   T3
         const y = x.right;
         x.right = y.left;
         if (y.left !== this.sentinel) {
@@ -174,17 +183,12 @@ export class RedBlackTree<K, V> {
 
         y.left = x;
         x.parent = y;
+
+        x.max = this.maxKey(x.high, x.left.max, x.right.max);
+        y.max = this.maxKey(y.high, y.left.max, y.right.max);
     }
 
     rightRotate(x: TreeNode<K, V>): void {
-        // Before:
-        //           P
-        //           |
-        //           x
-        //         /   \
-        //       T1     y
-        //             / \
-        //           T2   T3
         const y = x.left;
         x.left = y.right;
         if (y.right !== this.sentinel) {
@@ -203,5 +207,8 @@ export class RedBlackTree<K, V> {
 
         y.right = x;
         x.parent = y;
+
+        x.max = this.maxKey(x.high, x.left.max, x.right.max);
+        y.max = this.maxKey(y.high, y.left.max, y.right.max);
     }
 }
