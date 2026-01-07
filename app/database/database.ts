@@ -65,6 +65,7 @@ export const createDeckSQL = `
     algorithm_parameters TEXT -- 算法参数的 JSON 字符串
     );
 `;
+
 function createTableIfNotExists(): void {
     runSQL(createDeckSQL);
 }

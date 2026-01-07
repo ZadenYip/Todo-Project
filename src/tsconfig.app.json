@@ -12,7 +12,8 @@
   ],
   "include": [
     "**/*.ts",
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "../app/ipc/ipc-api.d.ts"
   ],
   "exclude": [
     "**/*.spec.ts",

@@ -1,5 +1,6 @@
-import { ipcMain, IpcMainInvokeEvent, webUtils } from "electron";
-import { runSQL } from "../database/database";
+import { registerProxy } from 'electron-ipc-cat/server';
+import { DatabaseServiceIPCDescriptor } from '../database/database-service.interface';
+import { DatabaseService } from '../database/database-service';
 
 export function registerAllIPCHandlers() {
     registerDatabaseHandlers();
@@ -7,15 +8,7 @@ export function registerAllIPCHandlers() {
 }
 
 function registerDatabaseHandlers() {
-    ipcMain.handle(
-        'database:runSQL', async (event: IpcMainInvokeEvent, sql: string, params?: any[]) => {
-            return runSQL(sql, params);
-        }
-    );
+    const databaseService = new DatabaseService();
+    registerProxy(databaseService, DatabaseServiceIPCDescriptor);
 }
 
-// function registerSubtitleLibHandlers() {
-//     ipcMain.handle(
-//         'subtitleLib:parseSubtitle', parseSubtitle
-//     )
-// }
