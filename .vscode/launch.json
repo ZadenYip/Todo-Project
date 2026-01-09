@@ -31,6 +31,8 @@
             "windows": {
                 "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
             },
+            "outFiles": ["${workspaceFolder}/app/**/*.js"],
+            "sourceMaps": true,
             "preLaunchTask": "Build.Main"
         },
         {

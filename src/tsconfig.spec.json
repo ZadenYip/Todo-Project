@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "composite": true,
     "esModuleInterop": true,
     "outDir": "../out-tsc/spec",
     "types": [
@@ -9,8 +10,10 @@
     ]
   },
   "include": [
+    "**/*.ts",
     "**/*.spec.ts",
-    "**/*.d.ts"
+    "**/*.d.ts",
+    "../app/ipc/ipc-api.d.ts"
   ],
   "exclude": [
     "dist",

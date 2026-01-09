@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "composite": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "commonjs",
+    "target": "es2020",
+    "types": [
+      "node"
+    ]
+  },
+  "files": [
+    "main.ts",
+    "preload.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
+// Just use for code completion and type checking in Electron main process files

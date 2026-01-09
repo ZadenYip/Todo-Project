@@ -26,10 +26,10 @@ vi.mock('electron-log/main', () => ({
     globalThis.window = {} as any;
   }
 
-  Object.defineProperty(globalThis.window, 'bridge', {
+  Object.defineProperty(globalThis.window, 'services', {
     value: {
       database: {
-        ipcRunSQL: vi.fn(),
+        runSQL: vi.fn(),
       },
     },
     writable: true,
