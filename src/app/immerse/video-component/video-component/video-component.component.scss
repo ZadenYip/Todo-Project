@@ -1,0 +1,57 @@
+// ==========================================
+// Video Panel Layout
+// ==========================================
+.video-panel {
+  flex: 1; // Fill all available space
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative; // Provide positioning context for video-overlay
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; // Maintain original video aspect ratio
+  }
+}
+
+// ==========================================
+// Video Hover Effect
+// ==========================================
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  // Make this overlay never intercept mouse events
+  pointer-events: none;
+
+  // Hide file input
+  input {
+    display: none;
+  }
+}
+
+// When the mouse hovers over the video panel, only change the overlay's opacity
+.video-panel:hover .video-overlay {
+  opacity: 1;
+}
+
+// "Open File" button styles
+.input-video-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+
+  // Enable pointer events only for the button itself
+  pointer-events: auto;
+}

@@ -20,7 +20,7 @@ const MOCK_RAW_DECKS = [
 
 describe('HomeService (Renderer Unit Test)', () => {
     let service: HomeService;
-    let ipcRunSQLMock: Mock = vi.spyOn(window.services.database, 'runSQL');
+    let ipcRunSQLMock: Mock = vi.spyOn(window.service.database, 'runSQL');
 
     beforeEach(() => {
         TestBed.configureTestingModule({ providers: [HomeService] });
