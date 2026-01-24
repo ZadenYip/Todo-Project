@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
-import { FileService } from 'app/shared/services/file.service';
+import { FileService } from '../../../shared/services/file.service';
 import Logger from 'electron-log/renderer';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';

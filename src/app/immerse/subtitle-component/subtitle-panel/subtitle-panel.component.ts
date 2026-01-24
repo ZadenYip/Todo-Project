@@ -6,9 +6,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { SafeUrl } from '@angular/platform-browser';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { GlobalSubtitle } from 'app/immerse/subtitle-interface';
-import { SubtitleService } from 'app/immerse/subtitle-service';
-import { FileService } from 'app/shared/services/file.service';
+import { SubtitleManager } from '../../find-subtitle-algo/subtitle-manager'; 
+import { SubtitleService } from '../../subtitle-service'; 
+import { FileService } from '../../../shared/services/file.service';
 import log from 'electron-log/renderer';
 
 
