@@ -45,7 +45,7 @@ export class IntervalTree<K, V> {
         this.root = this.sentinel;
     }
 
-    search(intLow: K, intHigh: K): TreeNode<K, V> | null {
+    search(intLow: K, intHigh: K): V | null {
         let cur = this.root;
         while (cur !== this.sentinel && !this.isOverlap(cur.low, cur.high, intLow, intHigh)) {
             const cmp = this.comparator(cur.left.max, intLow);
@@ -55,7 +55,7 @@ export class IntervalTree<K, V> {
                 cur = cur.right;
             }
         }
-        return cur === this.sentinel ? null : cur;
+        return cur === this.sentinel ? null : cur.value;
     }
 
     private isOverlap(aIntLow: K, aIntHigh: K, bIntLow: K, bIntHigh: K): boolean {
@@ -164,7 +164,7 @@ export class IntervalTree<K, V> {
         this.root.color = false;
     }
 
-    leftRotate(x: TreeNode<K, V>): void {
+    private leftRotate(x: TreeNode<K, V>): void {
         const y = x.right;
         x.right = y.left;
         if (y.left !== this.sentinel) {
@@ -188,7 +188,7 @@ export class IntervalTree<K, V> {
         y.max = this.maxKey(y.high, y.left.max, y.right.max);
     }
 
-    rightRotate(x: TreeNode<K, V>): void {
+    private rightRotate(x: TreeNode<K, V>): void {
         const y = x.left;
         x.left = y.right;
         if (y.right !== this.sentinel) {
