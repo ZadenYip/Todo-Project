@@ -6,7 +6,6 @@ import { SubtitleServiceIPCDescriptor } from '../subtitle-handler/subtitle-servi
 
 export function registerAllIPCHandlers() {
     registerDatabaseHandlers();
-    // registerSubtitleLibHandlers(); TODO
 }
 
 function registerDatabaseHandlers() {
