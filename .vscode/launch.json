@@ -12,17 +12,16 @@
             "url": "http://localhost:4200",
             "sourceMaps": true,  
             "timeout": 20000,
-            "trace": "verbose",
+            "trace": true,
             "preLaunchTask": "Build.Renderer"
         },
         {
             "name": "Main",
             "type": "node",
             "request": "launch",
-            "protocol": "inspector",
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
-            "trace": "verbose",
+            "trace": true,
             "runtimeArgs": [
                 "--serve",
                 ".",
@@ -36,7 +35,7 @@
             "preLaunchTask": "Build.Main"
         },
         {
-            "name": "Debug Current Angular Test File",
+            "name": "Run Current Angular Test File",
             "request": "launch",
             "type": "node",
             "cwd": "${workspaceFolder}",
@@ -51,7 +50,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug Current Main Process Test File",
+            "name": "Run Current Main Process Test File",
             "autoAttachChildProcesses": true,
             "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
             "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
@@ -67,12 +66,20 @@
             "runtimeExecutable": "npm",
             "args": ["run", "electron:test"],
             "console": "integratedTerminal"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Test All Angular Files",
+            "runtimeExecutable": "npm",
+            "args": ["run", "angular-test"],
+            "console": "integratedTerminal"
         }
     ],
     "compounds": [
         {
             "name": "Application Debug",
-            "configurations": [ "Renderer", "Main" ]
+            "configurations": [ "Main", "Renderer" ]
         }
     ]
 }
