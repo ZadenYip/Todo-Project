@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubtitlePanelComponent } from './subtitle-panel.component';
+import { SubtitlePanelComponent } from './subtitle-panel';
 import { TranslateModule } from '@ngx-translate/core';
 
 describe('SubtitlePanelComponent', () => {

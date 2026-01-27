@@ -5,10 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe, TranslateService, TranslateDirective } from '@ngx-translate/core';
-import { SubtitleManager } from '../../find-subtitle-algo/subtitle-manager'; 
-import { SubtitleService } from '../../subtitle-service'; 
-import { FileService } from '../../../shared/services/file.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { SubtitleManager } from '../find-subtitle-algo/subtitle-manager';
+import { SubtitleService } from '../subtitle-service';
+import { FileService } from '@shared/services/file.service';
 import Logger from 'electron-log/renderer';
 import { filter, map, Subscription, throttleTime } from 'rxjs';
 
@@ -24,8 +24,8 @@ import { filter, map, Subscription, throttleTime } from 'rxjs';
     MatSnackBarModule,
     MatTooltip
 ],
-    templateUrl: './subtitle-panel.component.html',
-    styleUrl: './subtitle-panel.component.scss',
+    templateUrl: './subtitle-panel.html',
+    styleUrl: './subtitle-panel.scss',
 })
 export class SubtitlePanelComponent implements OnInit, OnDestroy {
     private fileService = inject(FileService);

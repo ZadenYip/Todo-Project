@@ -1,12 +1,12 @@
 import { Component, ElementRef, inject, viewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
-import { FileService } from '../../../shared/services/file.service';
+import { FileService } from '../../shared/services/file.service';
 import Logger from 'electron-log/renderer';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
 import { TranslatePipe } from '@ngx-translate/core';
-import { SubtitleService } from '../../subtitle-service';
+import { SubtitleService } from '../subtitle-service';
 
 @Component({
     selector: 'video-component',
@@ -16,8 +16,8 @@ import { SubtitleService } from '../../subtitle-service';
         MatIconButton,
         TranslatePipe
     ],
-    templateUrl: './video-component.component.html',
-    styleUrl: './video-component.component.scss',
+    templateUrl: './video-component.html',
+    styleUrl: './video-component.scss',
 })
 export class VideoComponent {
     private fileService = inject(FileService);

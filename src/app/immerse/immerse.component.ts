@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SubtitlePanelComponent } from './subtitle-component/subtitle-panel/subtitle-panel.component';
-import { VideoComponent } from './video-component/video-component/video-component.component';
+import { SubtitlePanelComponent } from './subtitle-panel/subtitle-panel';
+import { VideoComponent } from './video-component/video-component';
 
 @Component({
     selector: 'app-immerse',

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VideoComponent } from './video-component.component';
+import { VideoComponent } from './video-component';
 import { TranslateModule } from '@ngx-translate/core';
 
 describe('VideoComponentComponent', () => {
