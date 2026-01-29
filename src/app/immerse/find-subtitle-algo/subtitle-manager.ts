@@ -28,8 +28,12 @@ export class SubtitleManager {
         );
     }
 
-    public get subtitles() : GlobalSubtitle[] {
+    get subtitles() : GlobalSubtitle[] {
         return this.subtitleList;
+    }
+
+    public refreshSubtitlesRef(): void {
+        this.subtitleList = [...this.subtitleList];
     }
     
 

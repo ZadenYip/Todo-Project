@@ -5,12 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { SafeUrl } from '@angular/platform-browser';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { SubtitleManager } from '../find-subtitle-algo/subtitle-manager';
+import { TranslatePipe } from '@ngx-translate/core';
 import { SubtitleService } from '../subtitle-service';
 import { FileService } from '@shared/services/file.service';
 import Logger from 'electron-log/renderer';
-import { filter, map, Subscription, throttleTime } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { SubtitleItemComponent } from './item/subtitle-item';
 
 
 @Component({
@@ -22,49 +22,24 @@ import { filter, map, Subscription, throttleTime } from 'rxjs';
     MatButtonModule,
     TranslatePipe,
     MatSnackBarModule,
-    MatTooltip
+    MatTooltip,
+    SubtitleItemComponent
 ],
     templateUrl: './subtitle-panel.html',
     styleUrl: './subtitle-panel.scss',
 })
 export class SubtitlePanelComponent implements OnInit, OnDestroy {
     private fileService = inject(FileService);
-    private translate = inject(TranslateService);
     private subscribeVideoPlaying$ = new Subscription();
 
     readonly subtitleListView =
         viewChild.required<CdkVirtualScrollViewport>('subtitleList');
     subtitleSrc: SafeUrl = '';
     private notificationBar = inject(MatSnackBar);
-    private subtitleService = inject(SubtitleService);
-
-    subtitleManager: SubtitleManager;
-    activeSubtitleIDs: Set<number> = new Set();
-    
-
-    constructor() {
-        this.subtitleManager = new SubtitleManager(
-            this.translate.instant(
-                'PAGES.IMMERSE.SUBTITLE.EMPTY',
-            ),
-        );
-    }
+    subtitleService = inject(SubtitleService);
 
     ngOnInit(): void {
         Logger.info('SubtitlePanelComponent initialized.');
-        this.createSubtitleHighlightTrigger();
-    }
-
-    private createSubtitleHighlightTrigger() {
-        this.subscribeVideoPlaying$ = this.subtitleService.subtitleUpdateTrigger$.pipe(
-            throttleTime(100),
-            map((videoCurTimeMs: number) => this.subtitleManager.nextSubtitleIds(videoCurTimeMs)),
-            filter((activeSubtitleIDs: Set<number>) => activeSubtitleIDs.size > 0),
-        ).subscribe(
-            (activeSubtitleIDs: Set<number>) => {
-                this.activeSubtitleIDs = activeSubtitleIDs;
-            }
-        );
     }
 
     ngOnDestroy(): void {
@@ -78,7 +53,7 @@ export class SubtitlePanelComponent implements OnInit, OnDestroy {
     onSubtitleChange(event: Event): void {
         const handler = async (file: File) => {
             Logger.info('Selected subtitle file:', file);
-            this.subtitleManager = await this.subtitleService.loadSubtitle(
+            await this.subtitleService.loadSubtitle(
                 file,
                 this.notificationBar,
             );
@@ -91,7 +66,4 @@ export class SubtitlePanelComponent implements OnInit, OnDestroy {
         );
     }
 
-    trackBySubtitleId(index: number, subtitle: { id: number }): number {
-        return subtitle.id;
-    }
 }
