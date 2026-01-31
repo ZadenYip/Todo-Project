@@ -55,9 +55,16 @@ export class VideoComponent {
     onVideoPlaying(event: Event): void {
         const currentTimeInSeconds =
             this.videoPlayer().nativeElement.currentTime;
-        Logger.debug('Current video time:', currentTimeInSeconds);
 
         const currentTimeInMs = Math.ceil(currentTimeInSeconds * 1000);
-        this.subtitleService.notifySubtitleUpdate(currentTimeInMs);
+        this.subtitleService.pushVideoTime(currentTimeInMs);
+    }
+
+    onVideoJump(event: Event): void {
+        const currentTimeInSeconds = this.videoPlayer().nativeElement.currentTime;
+        Logger.debug('Video jumped to:', currentTimeInSeconds);
+
+        const currentTimeInMs = Math.ceil(currentTimeInSeconds * 1000);
+        this.subtitleService.resetNextActiveIndex();
     }
 }

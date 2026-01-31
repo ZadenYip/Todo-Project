@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SubtitlePanelComponent } from './subtitle-panel/subtitle-panel';
 import { VideoComponent } from './video-component/video-component';
 import { SubtitleService } from './subtitle-service';
-import { FileService } from '@app/shared/services/file.service';
 
 @Component({
     selector: 'app-immerse',

@@ -5,12 +5,12 @@ import { filter, map, Subject, Subscription, throttleTime } from "rxjs";
 import { SubtitleManager } from "./find-subtitle-algo/subtitle-manager";
 
 @Injectable()
-export class SubtitleService implements OnDestroy {
+    export class SubtitleService implements OnDestroy {
 
     /**
      * notifying subtitle-panel component
      */
-    subtitleUpdateTrigger$ = new Subject<number>();
+    private videoTime$ = new Subject<number>();
     private subscription: Subscription = new Subscription();
     /**
      * currently active subtitle IDs 
@@ -26,12 +26,17 @@ export class SubtitleService implements OnDestroy {
             ),
         );
 
-        this.subscription.add(this.subtitleUpdateTrigger$.pipe(
+        this.initSubtitleSync()
+    }
+
+    private initSubtitleSync(): void {
+        this.subscription.add(this.videoTime$.pipe(
             throttleTime(100),
             map((videoCurTimeMs: number) => this.subtitleManager.nextSubtitleIds(videoCurTimeMs)),
             filter((activeSubtitleIDs: Set<number>) => activeSubtitleIDs.size > 0),
         ).subscribe(
             (activeSubtitleIDs: Set<number>) => {
+                // signal subtitle item components to highlight
                 this.activeIDs.set(activeSubtitleIDs);
             }
         ));
@@ -45,8 +50,12 @@ export class SubtitleService implements OnDestroy {
         this.subscription.unsubscribe();
     }
 
-    public notifySubtitleUpdate(videoCurTimeMs: number): void {
-        this.subtitleUpdateTrigger$.next(videoCurTimeMs);
+    /**
+     * 
+     * @param videoCurTimeMs - video time
+     */
+    public pushVideoTime(videoCurTimeMs: number): void {
+        this.videoTime$.next(videoCurTimeMs);
     }
 
     public async loadSubtitle(file: File, notificationBar: MatSnackBar): Promise<void> {
@@ -90,6 +99,8 @@ export class SubtitleService implements OnDestroy {
         });
     }
 
-
+    public resetNextActiveIndex(): void {
+        this.subtitleManager.resetNextActiveIndex();
+    }
     
 }

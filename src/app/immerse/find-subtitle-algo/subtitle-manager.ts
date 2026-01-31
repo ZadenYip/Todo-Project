@@ -73,6 +73,10 @@ export class SubtitleManager {
         return activeSubtitleIDs;
     }
 
+    public resetNextActiveIndex(): void {
+        this.nextActiveIndex = 0;
+    }
+
     /**
      * 
      * @param time - time in milliseconds

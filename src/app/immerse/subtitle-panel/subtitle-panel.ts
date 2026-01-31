@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
-import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
+import { AfterViewInit, Component, effect, inject, OnDestroy, OnInit, viewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -9,7 +9,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { SubtitleService } from '../subtitle-service';
 import { FileService } from '@shared/services/file.service';
 import Logger from 'electron-log/renderer';
-import { Subscription } from 'rxjs';
+import { Subscription, throttleTime } from 'rxjs';
 import { SubtitleItemComponent } from './item/subtitle-item';
 
 
@@ -28,23 +28,56 @@ import { SubtitleItemComponent } from './item/subtitle-item';
     templateUrl: './subtitle-panel.html',
     styleUrl: './subtitle-panel.scss',
 })
-export class SubtitlePanelComponent implements OnInit, OnDestroy {
+export class SubtitlePanelComponent implements OnInit, AfterViewInit {
     private fileService = inject(FileService);
-    private subscribeVideoPlaying$ = new Subscription();
-
-    readonly subtitleListView =
-        viewChild.required<CdkVirtualScrollViewport>('subtitleList');
-    subtitleSrc: SafeUrl = '';
     private notificationBar = inject(MatSnackBar);
+    private firstSubtitleInViewPoint: number = 0;
     subtitleService = inject(SubtitleService);
+    
+    readonly subtitleListView =
+    viewChild.required<CdkVirtualScrollViewport>('subtitleList');
+    subtitleSrc: SafeUrl = '';
+    subscription: Subscription = new Subscription();
+
+    constructor() {
+        this.initAutoScroll();
+    }
 
     ngOnInit(): void {
         Logger.info('SubtitlePanelComponent initialized.');
     }
 
-    ngOnDestroy(): void {
-        this.subscribeVideoPlaying$.unsubscribe();
+    ngAfterViewInit(): void {
+        this.trackFirstSubtitleInView();
     }
+
+    private trackFirstSubtitleInView(): void {
+        this.subscription.add(this.subtitleListView().scrolledIndexChange.subscribe(
+            (index: number) => {
+                this.firstSubtitleInViewPoint = index;
+                Logger.debug('First subtitle in view index updated to:', index);
+            }
+        ));
+    }
+
+    private initAutoScroll(): void {
+        effect(() => {
+            for (const id of this.subtitleService.activeIDs().values()) {
+                const index = id - 1;
+                const distance = Math.abs(this.firstSubtitleInViewPoint - index);
+                if (distance >= 4) {
+                    Logger.debug(`Auto-scrolling to subtitle ID: ${id} at index ${index}`);
+                    if (distance >= 20) {
+                        this.subtitleListView().scrollToIndex(index, 'auto');
+                    } else {
+                        this.subtitleListView().scrollToIndex(index, 'smooth');
+                    }
+                }
+                break;
+            }
+        })
+    }
+
 
     /**
      *

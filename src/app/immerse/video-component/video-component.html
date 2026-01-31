@@ -1,6 +1,10 @@
 <div class="video-panel">
   <!-- Video Player  -->
-  <video #videoPlayer [src]="videoSrc" controls width="640" (loadedmetadata)="onVideoLoad()" (timeupdate)="onVideoPlaying($event)"></video>
+  <video #videoPlayer [src]="videoSrc" controls width="640"
+  (loadedmetadata)="onVideoLoad()"
+  (timeupdate)="onVideoPlaying($event)"
+  (seeked)="onVideoJump($event)">
+  </video>
 
   <div class="video-overlay">
 
