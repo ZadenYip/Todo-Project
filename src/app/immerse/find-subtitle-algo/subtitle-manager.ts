@@ -2,7 +2,7 @@ import { GlobalSubtitle } from "../subtitle-interface";
 import { IntervalTree } from "./interval-tree";
 
 export class SubtitleManager {
-    private nextActiveIndex: number = 0;
+    private lastActiveIDs: Set<number> = new Set();
     private subtitleList: GlobalSubtitle[];
     private subtitleTree: IntervalTree<number, GlobalSubtitle>;
 
@@ -56,25 +56,41 @@ export class SubtitleManager {
     public nextSubtitleIds(time: number): Set<number> {
         let activeSubtitleIDs: Set<number> = new Set();
 
-        if (this.nextActiveIndex < this.subtitleList.length) {
-            const currentSubtitle = this.subtitleList[this.nextActiveIndex];
-            if (this.isOverlapping(currentSubtitle, time)) {
-                activeSubtitleIDs.add(currentSubtitle.id);
-                this.nextActiveIndex++;
-                return activeSubtitleIDs;
-            } else if (time > currentSubtitle.startTime) {
-                // current subtitle is past, need to use interval tree search
-                const subtitlesIDArray = this.findSubtitleAtTime(time);
-                subtitlesIDArray.forEach(id => activeSubtitleIDs.add(id));
-                this.nextActiveIndex = subtitlesIDArray.length > 0 ? subtitlesIDArray.at(-1)! + 1 : this.nextActiveIndex;
-            }
+        const subtitleIDs = this.findSubtitleAtTime(time);
+        // current subtitle is past, need to use interval tree search
+        subtitleIDs.forEach((id) => activeSubtitleIDs.add(id));
+
+
+        if (this.isSequenceEqual(activeSubtitleIDs, this.lastActiveIDs)) {
+            return this.lastActiveIDs;
+        } else {
+            this.lastActiveIDs = activeSubtitleIDs;
+            return activeSubtitleIDs;
         }
-        
-        return activeSubtitleIDs;
     }
 
-    public resetNextActiveIndex(): void {
-        this.nextActiveIndex = 0;
+    /**
+     * only for continuous subtitle sequences, not for disjoint subtitles
+     * @param setA 
+     * @param setB 
+     * @returns whether two sets are equal by comparing their sums, works for continuous subtitle sequences
+     */
+    private isSequenceEqual(setA: Set<number>, setB: Set<number>): boolean {
+        if (setA.size !== setB.size) {
+            return false;
+        }
+
+        let sumA = 0;
+        for (const item of setA) {
+            sumA += item;
+        }
+
+        let sumB = 0;
+        for (const item of setB) {
+            sumB += item;
+        }
+
+        return sumA === sumB;
     }
 
     /**
@@ -82,8 +98,8 @@ export class SubtitleManager {
      * @param time - time in milliseconds
      * @returns array of active subtitle IDs
      */
-    private findSubtitleAtTime(time: number): Array<number> {
-        const subtitleIDs: Array<number> = [];
+    private findSubtitleAtTime(time: number): number[] {
+        const subtitleIDs: number[] = [];
         const value = this.subtitleTree.search(time, time);
 
         if (!value) {
@@ -91,24 +107,26 @@ export class SubtitleManager {
         }
 
         const earliestSubtitleID = this.earliestOverlappingSubtitle(value.id, time);
-        const oldestSubtitleID = this.oldestOverlappingSubtitle(value.id, time);
+        const lastestSubtitleID = this.lastestOverlappingSubtitle(value.id, time);
 
-        for (let i = earliestSubtitleID; i <= oldestSubtitleID; i++) {
+        for (let i = earliestSubtitleID; i <= lastestSubtitleID; i++) {
             subtitleIDs.push(i);
         }
 
         return subtitleIDs;
     }
 
-    private earliestOverlappingSubtitle(index: number, time: number): number {
-        const startingSubtitle = this.subtitleList[index];
-        let earliestSubtitle = startingSubtitle;
-        let subtitle = this.subtitleList.at(earliestSubtitle.id - 1);
-        while (subtitle!.startTime <= earliestSubtitle.startTime && this.isOverlapping(subtitle!, time)) {
-            earliestSubtitle = subtitle!;
-            subtitle = this.subtitleList.at(earliestSubtitle.id - 1);
+    private earliestOverlappingSubtitle(startIndex: number, time: number): number {
+        let searchIndex = startIndex;
+        while (searchIndex - 1 >= 0) {
+            const currentSubtitle = this.subtitleList[searchIndex - 1];
+            if (this.isOverlapping(currentSubtitle, time)) {
+                searchIndex -= 1;
+            } else {
+                break;
+            }
         }
-        return earliestSubtitle.id;
+        return searchIndex;
     }
 
     
@@ -118,16 +136,18 @@ export class SubtitleManager {
      * @param time - overlap time in milliseconds
      * @returns the oldest overlapping subtitle ID
      */
-    private oldestOverlappingSubtitle(startIndex: number, time: number): number {
-        for (let i = startIndex; i < this.subtitleList.length; i++) {
-            const currentSubtitle = this.subtitleList[i];
+    private lastestOverlappingSubtitle(startIndex: number, time: number): number {
+        let searchIndex = startIndex;
+        while (searchIndex + 1 < this.subtitleList.length) {
+            const currentSubtitle = this.subtitleList[searchIndex + 1];
             if (this.isOverlapping(currentSubtitle, time)) {
-                continue;
+                searchIndex += 1;
             } else {
-                return i - 1;
+                break;
             }
         }
-        throw new Error("No non-overlapping subtitle found");
+        
+        return searchIndex;
     }
 
     private isOverlapping(subtitle: GlobalSubtitle, time: number): boolean {

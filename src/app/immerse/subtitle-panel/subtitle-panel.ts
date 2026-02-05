@@ -28,7 +28,7 @@ import { SubtitleItemComponent } from './item/subtitle-item';
     templateUrl: './subtitle-panel.html',
     styleUrl: './subtitle-panel.scss',
 })
-export class SubtitlePanelComponent implements OnInit, AfterViewInit {
+export class SubtitlePanelComponent implements OnInit, OnDestroy, AfterViewInit {
     private fileService = inject(FileService);
     private notificationBar = inject(MatSnackBar);
     private firstSubtitleInViewPoint: number = 0;
@@ -47,6 +47,10 @@ export class SubtitlePanelComponent implements OnInit, AfterViewInit {
         Logger.info('SubtitlePanelComponent initialized.');
     }
 
+    ngOnDestroy(): void {
+        this.fileService.revokeURL(this.subtitleSrc);
+    }
+
     ngAfterViewInit(): void {
         this.trackFirstSubtitleInView();
     }
@@ -62,7 +66,7 @@ export class SubtitlePanelComponent implements OnInit, AfterViewInit {
 
     private initAutoScroll(): void {
         effect(() => {
-            for (const id of this.subtitleService.activeIDs().values()) {
+            for (const id of this.subtitleService.panelActiveIDs().values()) {
                 const index = id - 1;
                 const distance = Math.abs(this.firstSubtitleInViewPoint - index);
                 if (distance >= 4) {

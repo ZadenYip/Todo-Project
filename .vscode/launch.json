@@ -43,7 +43,8 @@
             "args": [
                 "test",
                 "--include",
-                "**/${fileBasename}"
+                "**/${fileBasename}",
+                "--debug",
             ],
             "console": "integratedTerminal"
         },
@@ -56,6 +57,7 @@
             "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
             "args": ["run", "${relativeFile}"],
             "smartStep": true,
+            "sourceMaps": true,
             "console": "integratedTerminal"
         },
         {

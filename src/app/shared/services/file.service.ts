@@ -45,4 +45,12 @@ export class FileService {
 
         return '';
     }
+
+    revokeURL(safeUrl: SafeUrl): void {
+        const urlString = this.sanitizer.sanitize(SecurityContext.URL, safeUrl);
+        if (urlString !== '') {
+            Logger.info('Revoking object URL:', urlString);
+            URL.revokeObjectURL(urlString!);
+        }
+    }
 }

@@ -18,7 +18,7 @@ export class SubtitleItemComponent {
      * whether this subtitle item is currently active/highlighted
      */
     isActive = computed(() => {
-        return this.subtitleService.activeIDs().has(this.id());
+        return this.subtitleService.panelActiveIDs().has(this.id());
     });
 
 }
