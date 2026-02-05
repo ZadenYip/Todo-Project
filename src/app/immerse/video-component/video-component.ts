@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, OnDestroy, viewChild } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { FileService } from '../../shared/services/file.service';
 import Logger from 'electron-log/renderer';
@@ -14,26 +14,26 @@ import { SubtitleService } from '../subtitle-service';
     templateUrl: './video-component.html',
     styleUrl: './video-component.scss',
 })
-export class VideoComponent {
+export class VideoComponent implements OnDestroy{
     private fileService = inject(FileService);
     private subtitleService = inject(SubtitleService);
     readonly videoPlayer =
         viewChild.required<ElementRef<HTMLVideoElement>>('videoPlayer');
     displaySubtitles = computed<string[]>(() => {
-        const subtitles = new Array<string>();
-        if (this.subtitleService.activeIDs().size > 0) {
-            for (const id of this.subtitleService.activeIDs()) {
-                const subtitleItem = this.subtitleService.getSubtitle(id);
-                subtitleItem?.textLines.forEach((line: string) => {
-                    subtitles.push(line);
-                });
-            }
-            return subtitles;
-        } else {
-            return subtitles;
+        const subtitles: string[] = [];
+        for (const id of this.subtitleService.videoActiveIDs()) {
+            const subtitleItem = this.subtitleService.getSubtitle(id);
+            subtitleItem?.textLines.forEach((line: string) => {
+                subtitles.push(line);
+            });
         }
+        return subtitles;
     });
     videoSrc: SafeUrl = '';
+
+    ngOnDestroy(): void {
+        this.fileService.revokeURL(this.videoSrc);
+    }
 
     /**
      * Called after a file is selected.
@@ -75,6 +75,14 @@ export class VideoComponent {
         Logger.debug('Video jumped to:', currentTimeInSeconds);
 
         const currentTimeInMs = Math.ceil(currentTimeInSeconds * 1000);
-        this.subtitleService.resetNextActiveIndex();
+        this.subtitleService.pushVideoTime(currentTimeInMs);
+    }
+
+    pauseVideo(): void {
+        this.videoPlayer().nativeElement.pause();
+    }
+
+    playVideo(): void {
+        this.videoPlayer().nativeElement.play();
     }
 }

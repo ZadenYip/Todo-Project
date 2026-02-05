@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SubtitlePanelComponent } from './subtitle-panel';
 import { TranslateModule } from '@ngx-translate/core';
+import { SubtitleService } from '../subtitle-service';
 
 describe('SubtitlePanelComponent', () => {
   let component: SubtitlePanelComponent;
@@ -12,6 +13,9 @@ describe('SubtitlePanelComponent', () => {
       imports: [ 
         SubtitlePanelComponent,
         TranslateModule.forRoot()
+       ],
+       providers: [
+        SubtitleService
        ]
     })
     .compileComponents();

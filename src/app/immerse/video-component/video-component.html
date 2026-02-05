@@ -17,7 +17,7 @@
 
   </div>
 
-  <div class="subtitle-overlay">
+  <div class="subtitle-overlay" (mouseenter)="pauseVideo()" (mouseleave)="playVideo()">
     @for (subtitle of displaySubtitles(); track $index) {
         {{ subtitle }}<br>
     }

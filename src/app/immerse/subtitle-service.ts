@@ -1,23 +1,22 @@
-import { Injectable, OnDestroy, signal } from "@angular/core";
+import { Injectable, Signal } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { TranslateService } from "@ngx-translate/core";
 import { filter, map, Subject, Subscription, throttleTime } from "rxjs";
 import { SubtitleManager } from "./find-subtitle-algo/subtitle-manager";
 import { GlobalSubtitle } from "./subtitle-interface";
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable()
-    export class SubtitleService implements OnDestroy {
+    export class SubtitleService {
 
     /**
      * notifying subtitle-panel component
      */
     private videoTime$ = new Subject<number>();
-    private subscription: Subscription = new Subscription();
-    /**
-     * currently active subtitle IDs 
-     * used for siganling subtitle item components to highlight
-     */
-    activeIDs = signal<Set<number>>(new Set<number>());
+    
+    panelActiveIDs: Signal<Set<number>>;
+    videoActiveIDs: Signal<Set<number>>;
+    
     private subtitleManager: SubtitleManager;
     
     constructor(private translate: TranslateService) {
@@ -27,24 +26,17 @@ import { GlobalSubtitle } from "./subtitle-interface";
             ),
         );
 
-        this.initSubtitleSync()
+
+        // filtering active IDs for panel (only non-empty sets)
+        this.panelActiveIDs = toSignal(this.getActiveIDsStream().pipe(filter(activeIDs => activeIDs.size > 0)), {initialValue: new Set<number>()});
+        this.videoActiveIDs = toSignal(this.getActiveIDsStream(), {initialValue: new Set<number>()});
     }
 
-    private initSubtitleSync(): void {
-        this.subscription.add(this.videoTime$.pipe(
-            throttleTime(100),
-            map((videoCurTimeMs: number) => this.subtitleManager.nextSubtitleIds(videoCurTimeMs)),
-            filter((activeSubtitleIDs: Set<number>) => activeSubtitleIDs.size > 0),
-        ).subscribe(
-            (activeSubtitleIDs: Set<number>) => {
-                // signal subtitle item components to highlight
-                this.activeIDs.set(activeSubtitleIDs);
-            }
+    private getActiveIDsStream() {
+        return this.videoTime$.pipe(
+            throttleTime(10),
+            map((videoCurTimeMs: number) => this.subtitleManager.nextSubtitleIds(videoCurTimeMs)
         ));
-    }
-
-    ngOnDestroy(): void {
-        this.subscription.unsubscribe();
     }
 
     get subtitles(): GlobalSubtitle[] {
@@ -110,10 +102,6 @@ import { GlobalSubtitle } from "./subtitle-interface";
                 },
           });
         });
-    }
-
-    public resetNextActiveIndex(): void {
-        this.subtitleManager.resetNextActiveIndex();
     }
     
 }
