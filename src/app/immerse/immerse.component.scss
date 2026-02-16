@@ -14,7 +14,7 @@
 // 2. Left Video Panel
 // ==========================================
 // Let video-component host element participate in flex layout
-video-component {
+app-video-component {
   flex: 1; // Take up all available remaining space
   display: flex;
   min-height: 0;
@@ -24,7 +24,7 @@ video-component {
 // 3. Right Subtitle Panel
 // ==========================================
 // Let subtitle-panel component's host element participate in flex layout
-subtitle-panel {
+app-subtitle-panel {
   display: flex;
   flex-direction: column;
   min-height: 0; // Allow shrinking
