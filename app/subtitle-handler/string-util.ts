@@ -1,5 +1,5 @@
 export function isDigit(char: string | null): boolean {
-    const regex: RegExp = /\d/;
+    const regex = /\d/;
     return regex.test(char || '');
 }
 

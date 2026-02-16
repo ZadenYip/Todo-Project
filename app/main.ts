@@ -32,19 +32,19 @@ function createWindow(): BrowserWindow {
             debug.default({ isEnabled: true, showDevTools: true });
         });
 
-    import('electron-reloader').then(reloader => {
-      const reloaderFn = (reloader as any).default || reloader;
-      reloaderFn(module);
-    });
-    win.loadURL('http://localhost:4200');
-  } else {
-    // Path when running electron executable
-    let pathIndex = './browser/index.html';
+        import('electron-reloader').then((reloader) => {
+            const reloaderFn = reloader.default || reloader;
+            reloaderFn(module);
+        });
+        win.loadURL('http://localhost:4200');
+    } else {
+        // Path when running electron executable
+        let pathIndex = './browser/index.html';
 
-    if (fs.existsSync(path.join(__dirname, '../dist/browser/index.html'))) {
-       // Path when running electron in local folder
-      pathIndex = '../dist/browser/index.html';
-    }
+        if (fs.existsSync(path.join(__dirname, '../dist/browser/index.html'))) {
+            // Path when running electron in local folder
+            pathIndex = '../dist/browser/index.html';
+        }
 
         const fullPath = path.join(__dirname, pathIndex);
         const url = `file://${path.resolve(fullPath).replace(/\\/g, '/')}`;
@@ -62,28 +62,23 @@ function createWindow(): BrowserWindow {
     return win;
 }
 
-try {
-    app.whenReady().then(() => {
-        loggerSetUp(serve);
-        initDatabase();
-        createWindow();
-        registerAllIPCHandlers();
+app.whenReady().then(() => {
+    loggerSetUp(serve);
+    initDatabase();
+    createWindow();
+    registerAllIPCHandlers();
 
-        app.on('activate', () => {
-            if (BrowserWindow.getAllWindows().length === 0) {
-                createWindow();
-            }
-        });
-    });
-
-    app.on('window-all-closed', () => {
-        // On OS X it is common for applications and their menu bar
-        // to stay active until the user quits explicitly with Cmd + Q
-        if (process.platform !== 'darwin') {
-            app.quit();
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
         }
     });
-} catch (e) {
-    // Catch Error
-    // throw e;
-}
+});
+
+app.on('window-all-closed', () => {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});

@@ -3,7 +3,7 @@ import { CueAST, Parser, TimestampAST } from "./parser";
 
 describe('Subtitle Parser', () => {
     it('should parse cues correctly', async () => { 
-        let subtitleData:string = '1\r\n00:00:01,000 --> 00:00:04,000\r\nHello World!\r\n';
+        let subtitleData = '1\r\n00:00:01,000 --> 00:00:04,000\r\nHello World!\r\n';
         subtitleData += '\r\n'; // empty line between cues
         subtitleData += '2\r\n00:00:05,000 --> 00:00:08,000\r\nThis is a test.';    
 
@@ -22,7 +22,7 @@ describe('Subtitle Parser', () => {
     });
 
     it('should handle multi-line cue text', async () => { 
-        let subtitleData:string = '1\r\n00:00:01,000 --> 00:00:04,000\r\n';
+        let subtitleData = '1\r\n00:00:01,000 --> 00:00:04,000\r\n';
         subtitleData += 'Hello World!\r\nThis is line 2.\r\nAnd line 3.\r\n';
         subtitleData += '\r\n'; // empty line between cues
         subtitleData += '2\r\n00:00:05,000 --> 00:00:08,000\r\nSingle line cue.';    
@@ -42,7 +42,7 @@ describe('Subtitle Parser', () => {
     });
 
     it('should handle different line endings', async () => { 
-        let subtitleData:string = '1\n00:00:01.000 --> 00:00:04.000\nHello World!\n\n';
+        let subtitleData = '1\n00:00:01.000 --> 00:00:04.000\nHello World!\n\n';
         subtitleData += '2\r\n00:00:05.000 --> 00:00:08.000\r\nThis is a test.\r\n';
         const expectedCues: CueAST[] = [
             new CueAST(1, 
@@ -59,7 +59,7 @@ describe('Subtitle Parser', () => {
     });
 
     it('should handle unformatted cue text', async () => { 
-        let subtitleData:string = '\r\n\r\n1\r\n00:00:01,000 --> 00:00:04,000\r\n<b>Hello World!</b>\r\n';
+        let subtitleData = '\r\n\r\n1\r\n00:00:01,000 --> 00:00:04,000\r\n<b>Hello World!</b>\r\n';
         subtitleData += '\r\n'; // empty line between cues
         subtitleData += '\r\n';
         subtitleData += '2\r\n00:00:05,000 --> 00:00:08,000\r\nThis is a <i>test</i>.\r\n\r\n';
@@ -79,7 +79,7 @@ describe('Subtitle Parser', () => {
     });
 
     it('should handle special token in text lines', async () => {
-        let subtitleData:string = '1\r\n00:00:01,000 --> 00:00:04,000\r\nHello World!;,.-->\r\n';
+        let subtitleData = '1\r\n00:00:01,000 --> 00:00:04,000\r\nHello World!;,.-->\r\n';
         subtitleData += '\r\n';
         const expectedCues: CueAST[] = [
             new CueAST(1, 

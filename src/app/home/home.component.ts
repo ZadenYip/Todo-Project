@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { HomeService } from './service/home.service';
 import { Observable, of } from 'rxjs';
@@ -16,12 +16,12 @@ import Logger from 'electron-log';
     imports: [TranslateModule, MatTableModule]
 })
 export class HomeComponent implements OnInit {
+    private readonly router: Router = inject(Router);
     private homeService: HomeService = inject(HomeService);
     deckListSrc: DeckListDataSource = new DeckListDataSource(of([]));
     displayedColumns: string[] = ['id', 'name', 'newCardsPerDay', 'newCardsLearned'];
     // TODO 调整css样式
     deckList$: Observable<DeckListItem[]> | null = null;   
-    constructor(private router: Router) {}
 
     ngOnInit(): void {
         Logger.info('HomeComponent initialized');

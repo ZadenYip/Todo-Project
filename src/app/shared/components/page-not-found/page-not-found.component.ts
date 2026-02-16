@@ -8,7 +8,6 @@ import Logger from 'electron-log/renderer';
     standalone: true,
 })
 export class PageNotFoundComponent implements OnInit {
-    constructor() {}
 
     ngOnInit(): void {
         Logger.info('PageNotFoundComponent INIT');

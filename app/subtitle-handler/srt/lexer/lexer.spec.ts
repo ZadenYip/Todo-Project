@@ -241,7 +241,7 @@ describe("Lexer", () => {
 async function expectTokens(lexer: Lexer, expected: Token[]) {
     const actualTokens: Token[] = [];
 
-    for (let i = 0; i < expected.length; i++) {
+    for (const _ of expected) {
         const token: Token = await lexer.getToken();
         actualTokens.push(token);
     }

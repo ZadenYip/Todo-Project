@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
     Router,
@@ -25,6 +25,9 @@ import Logger from 'electron-log/renderer';
     ],
 })
 export class AppComponent {
+    private readonly router: Router = inject(Router);
+    private readonly translate: TranslateService = inject(TranslateService);
+    
     readonly tabs = [
         { label: 'HEADER.DECKS', path: '/home' },
         { label: 'HEADER.IMMERSE', path: '/immerse' },
@@ -50,7 +53,7 @@ export class AppComponent {
         Logger.info('Sync triggered');
     }
 
-    constructor(private router: Router, private translate: TranslateService) {
+    constructor() {
         this.translate.setDefaultLang('en');
         // Use browser language
         this.translate.use(navigator.language);

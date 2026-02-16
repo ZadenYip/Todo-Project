@@ -8,10 +8,9 @@ import Logger from 'electron-log';
     providedIn: 'root',
 })
 export class HomeService {
-    constructor() {}
 
     public queryDeckList(): Observable<DeckListItem[]> {
-        const sql: string = `
+        const sql = `
             SELECT deck_id, name, new_cards_per_day, new_cards_learned FROM decks
         `;
 

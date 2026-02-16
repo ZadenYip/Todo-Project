@@ -3,9 +3,9 @@ import { Readable } from 'stream';
 
 export class CharReader {
     private iterator: AsyncIterableIterator<any>;
-    private buffer: string = ''; // buffer
-    private ptr: number = 0;     // current read pointer position
-    private isEOF: boolean = false;
+    private buffer = ''; // buffer
+    private ptr = 0;     // current read pointer position
+    private isEOF = false;
 
     constructor(stream: Readable) {
         this.iterator = stream[Symbol.asyncIterator]();
@@ -36,7 +36,7 @@ export class CharReader {
      * peek(0) is the next character to read not currently at pointer.
      * peek(1) is the character after next.
      */
-    public async peek(offset: number = 0): Promise<string | null> {
+    public async peek(offset = 0): Promise<string | null> {
         // We need to ensure the buffer covers the position ptr + offset
         await this.ensureAvailable(offset + 1);
 

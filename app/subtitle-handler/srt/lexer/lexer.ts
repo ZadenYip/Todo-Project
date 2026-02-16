@@ -53,7 +53,7 @@ export class Lexer {
         let lastChar = await this.charReader.peek();
         
         while (isSpace(lastChar)) {
-            let spaceStr:string = '';
+            let spaceStr = '';
             do {
                 spaceStr += lastChar;
                 await this.charReader.next();
@@ -105,7 +105,7 @@ export class Lexer {
             return new Token(TokenType.EOF);
         } else {
             // TEXT
-            let text: string = '';
+            let text = '';
             do {
                 text += lastChar;
                 await this.charReader.next();

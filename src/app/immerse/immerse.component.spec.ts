@@ -1,7 +1,7 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {TranslateModule} from '@ngx-translate/core';
-import {provideRouter} from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideRouter } from '@angular/router';
 import { ImmerseComponent } from './immerse.component';
 
 describe('ImmerseComponent', () => {

@@ -10,20 +10,20 @@ import { SubtitleService } from '../subtitle-service';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 
 @Component({
-    selector: 'video-component',
+    selector: 'app-video-component',
     imports: [MatTooltip, MatIcon, MatIconButton, TranslatePipe],
     templateUrl: './video-component.html',
     styleUrl: './video-component.scss',
 })
 export class VideoComponent implements OnDestroy{
     private keydownSubscription!: Subscription;
-    private clearSubtitletipTimer: number = -1;
+    private clearSubtitletipTimer = -1;
     private fileService = inject(FileService);
     private subtitleService = inject(SubtitleService);
     readonly videoPlayer =
         viewChild.required<ElementRef<HTMLVideoElement>>('videoPlayer');
     private userPaused = false;
-    subtitleOffsetTip: string = '';
+    subtitleOffsetTip = '';
     translate = inject(TranslateService);
     displaySubtitles = computed<string[]>(() => {
         const subtitles: string[] = [];
@@ -113,7 +113,7 @@ export class VideoComponent implements OnDestroy{
         }, 0);
     }
 
-    onVideoPlaying(event: Event): void {
+    onVideoPlaying(): void {
         const currentTimeInSeconds =
             this.videoPlayer().nativeElement.currentTime;
 
@@ -121,7 +121,7 @@ export class VideoComponent implements OnDestroy{
         this.subtitleService.pushVideoTime(currentTimeInMs);
     }
 
-    onVideoJump(event: Event): void {
+    onVideoJump(): void {
         const currentTimeInSeconds =
         this.videoPlayer().nativeElement.currentTime;
         Logger.debug('Video jumped to:', currentTimeInSeconds);

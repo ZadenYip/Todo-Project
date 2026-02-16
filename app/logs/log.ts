@@ -1,7 +1,6 @@
 import { app } from 'electron';
 import log from 'electron-log/main';
 import * as path from 'path';
-import { of } from 'rxjs';
 
 export function loggerSetUp(serve: boolean): void {
     // Initialize Electron Log

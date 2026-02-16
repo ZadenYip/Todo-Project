@@ -115,7 +115,12 @@
               "lcovonly"
             ],
             "reporters": [
-              ["default", { "summary": true }],
+              [
+                "default",
+                {
+                  "summary": true
+                }
+              ],
               [
                 "html",
                 {

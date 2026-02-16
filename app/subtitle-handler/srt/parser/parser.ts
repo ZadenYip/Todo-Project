@@ -88,40 +88,41 @@ export class Parser {
     }
 
     private async *startParsing(): AsyncGenerator<CueAST> {
-        try {
-            await this.tokenStream.start();
-            let currentToken = this.tokenStream.peek();
-            while (true) {
-                // skip tokens until we find a NUMBER token (cue sequence) or EOF
-                while (currentToken.type !== TokenType.NUMBER && currentToken.type !== TokenType.EOF) {
-                    currentToken = await this.tokenStream.consume();
-                    currentToken = this.tokenStream.peek();
-                }
-
-                // if EOF, end parsing
-                if (currentToken.type === TokenType.EOF) {
-                    break;
-                } else {
-                    // NUMBER token found, try to parse cue
-                    const cue = await this.parseCue();
-                    yield cue;
-                    currentToken = this.tokenStream.peek();
-                }
+        await this.tokenStream.start();
+        let currentToken = this.tokenStream.peek();
+        while (true) {
+            // skip tokens until we find a NUMBER token (cue sequence) or EOF
+            while (
+                currentToken.type !== TokenType.NUMBER &&
+                currentToken.type !== TokenType.EOF
+            ) {
+                currentToken = await this.tokenStream.consume();
+                currentToken = this.tokenStream.peek();
             }
-            return;
-        } catch (err) {
-            throw err;
+
+            // if EOF, end parsing
+            if (currentToken.type === TokenType.EOF) {
+                break;
+            } else {
+                // NUMBER token found, try to parse cue
+                const cue = await this.parseCue();
+                yield cue;
+                currentToken = this.tokenStream.peek();
+            }
         }
+        return;
     }
 
     private async parseCue(): Promise<CueAST> {
-        const sequenceToken = await this.tokenStream.eatExpect(TokenType.NUMBER);
+        const sequenceToken = await this.tokenStream.eatExpect(
+            TokenType.NUMBER,
+        );
         const sequence = parseInt(sequenceToken.value!);
         await this.tokenStream.eatExpect(TokenType.NEWLINE);
 
         const startTime = await this.parseTimestamp();
         await this.tokenStream.eatExpect(TokenType.SPACE);
-        const arrowToken = await this.tokenStream.eatExpect(TokenType.TIME_ARROW);
+        const _arrowToken = await this.tokenStream.eatExpect(TokenType.TIME_ARROW);
         await this.tokenStream.eatExpect(TokenType.SPACE);
         const endTime = await this.parseTimestamp();
         await this.tokenStream.eatExpect(TokenType.NEWLINE);
@@ -131,7 +132,7 @@ export class Parser {
         return new CueAST(sequence, startTime, endTime, textLines);
     }
 
-     private async parseTimestamp(): Promise<TimestampAST> {
+    private async parseTimestamp(): Promise<TimestampAST> {
         const hoursToken = await this.tokenStream.eatExpect(TokenType.NUMBER);
         const hours = parseInt(hoursToken.value!);
         await this.tokenStream.eatExpect(TokenType.COLON);
@@ -143,7 +144,9 @@ export class Parser {
         const seconds = parseInt(secondsToken.value!);
         await this.tokenStream.eatExpect(TokenType.DOT_OR_COMMA);
 
-        const millisecondsToken = await this.tokenStream.eatExpect(TokenType.NUMBER);
+        const millisecondsToken = await this.tokenStream.eatExpect(
+            TokenType.NUMBER,
+        );
         const milliseconds = parseInt(millisecondsToken.value!);
 
         return new TimestampAST(hours, minutes, seconds, milliseconds);
@@ -153,7 +156,7 @@ export class Parser {
         const textLines: string[] = [];
         let line = '';
         let currentToken = this.tokenStream.peek();
-        
+
         while (currentToken.type !== TokenType.EOF) {
             const text = currentToken.value!;
             if (currentToken.type === TokenType.NEWLINE) {
@@ -166,8 +169,7 @@ export class Parser {
                 if (currentToken.type === TokenType.NEWLINE) {
                     break;
                 }
-            }
-            else {
+            } else {
                 line += text;
                 await this.tokenStream.consume();
                 currentToken = this.tokenStream.peek();
@@ -177,7 +179,7 @@ export class Parser {
         if (line.length > 0) {
             textLines.push(line);
         }
-        
+
         return textLines;
     }
 }

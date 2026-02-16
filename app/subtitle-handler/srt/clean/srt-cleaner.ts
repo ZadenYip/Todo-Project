@@ -14,7 +14,7 @@ import { CueAST, Parser, TimestampAST } from "../parser/parser";
 export async function* removeDuplicateCue(input: Readable): AsyncGenerator<string> {
     const parserStream: AsyncIterable<CueAST> = Parser.createParser(input);
 
-    let curLine: number = 1;
+    let curLine = 1;
 
     const cueSet: Set<string> = new Set<string>();
 

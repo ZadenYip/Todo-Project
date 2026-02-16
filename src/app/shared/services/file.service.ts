@@ -1,4 +1,4 @@
-import { Injectable, SecurityContext } from '@angular/core';
+import { inject, Injectable, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import Logger from 'electron-log/renderer';
 
@@ -6,8 +6,7 @@ import Logger from 'electron-log/renderer';
     providedIn: 'root',
 })
 export class FileService {
-
-    constructor(private sanitizer: DomSanitizer) {}
+    private sanitizer = inject(DomSanitizer);
 
     /**
      * Creates an object URL from the selected file and revokes the previous one.

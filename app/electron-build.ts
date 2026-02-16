@@ -6,7 +6,7 @@ build({
     },
     bundle: true,
     platform: 'node',
-    target: 'es2020',
+    target: 'es2022',
     format: 'cjs',
     sourcemap: true,
     packages: 'external',
@@ -20,7 +20,7 @@ build({
     },
     bundle: true,
     platform: 'node',
-    target: 'es2020',
+    target: 'es2022',
     format: 'cjs',
     sourcemap: true,
     external: [

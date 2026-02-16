@@ -9,12 +9,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { SubtitleService } from '../subtitle-service';
 import { FileService } from '@shared/services/file.service';
 import Logger from 'electron-log/renderer';
-import { Subscription, throttleTime } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { SubtitleItemComponent } from './item/subtitle-item';
 
 
 @Component({
-    selector: 'subtitle-panel',
+    selector: 'app-subtitle-panel',
     imports: [
     CdkVirtualScrollViewport,
     ScrollingModule,
@@ -31,7 +31,7 @@ import { SubtitleItemComponent } from './item/subtitle-item';
 export class SubtitlePanelComponent implements OnInit, OnDestroy, AfterViewInit {
     private fileService = inject(FileService);
     private notificationBar = inject(MatSnackBar);
-    private firstSubtitleInViewPoint: number = 0;
+    private firstSubtitleInViewPoint = 0;
     subtitleService = inject(SubtitleService);
     
     readonly subtitleListView =

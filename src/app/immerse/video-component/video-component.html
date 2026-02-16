@@ -2,8 +2,8 @@
   <!-- Video Player  -->
   <video  #videoPlayer [src]="videoSrc" controls width="640"
   (loadedmetadata)="onVideoLoad()"
-  (timeupdate)="onVideoPlaying($event)"
-  (seeked)="onVideoJump($event)">
+  (timeupdate)="onVideoPlaying()"
+  (seeked)="onVideoJump()">
   </video>
 
   <div class="video-overlay">

@@ -2,7 +2,7 @@ import { GlobalSubtitle } from "../subtitle-interface";
 import { IntervalTree } from "./interval-tree";
 
 export class SubtitleManager {
-    private lastActiveIDs: Set<number> = new Set();
+    private lastActiveIDs = new Set<number>();
     private subtitleList: GlobalSubtitle[];
     private subtitleTree: IntervalTree<number, GlobalSubtitle>;
 
@@ -54,7 +54,7 @@ export class SubtitleManager {
      * @returns set of active subtitle IDs
      */
     public nextSubtitleIds(time: number): Set<number> {
-        let activeSubtitleIDs: Set<number> = new Set();
+        const activeSubtitleIDs = new Set<number>();
 
         const subtitleIDs = this.findSubtitleAtTime(time);
         // current subtitle is past, need to use interval tree search
