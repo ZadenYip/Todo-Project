@@ -18,9 +18,6 @@
         <div class="value">{{ contextSentence() }}</div>
       </div>
     </mat-card-content>
-    <mat-card-actions align="end">
-      <button mat-flat-button color="primary">添加到卡片</button>
-    </mat-card-actions>
   </mat-card>
 
   <mat-card class="meanings-card">
@@ -41,6 +38,7 @@
                   [item]="def"
                   [index]="$index + 1"
                   [posLabel]="sense.partOfSpeech"
+                  (add)="onAddCard($event, sense.partOfSpeech)"
                 ></app-meaning-card>
               }
             </div>

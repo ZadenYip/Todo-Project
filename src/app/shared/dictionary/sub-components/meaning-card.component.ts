@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Definition } from '../dictionary-interface';
@@ -8,6 +9,7 @@ import { Definition } from '../dictionary-interface';
   selector: 'app-meaning-card',
   imports: [
     CommonModule,
+    MatButtonModule,
     MatCardModule,
     MatExpansionModule
   ],
@@ -22,4 +24,9 @@ export class MeaningCardComponent {
     definition: { source: '', target: '' },
     examples: [],
   });
+  add = output<Definition>();
+
+  addToCard(): void {
+    this.add.emit(this.item());
+  }
 }

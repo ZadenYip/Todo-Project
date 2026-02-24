@@ -14,6 +14,9 @@
           <div class="gloss-zh">{{ item().definition.target }}</div>
         }
       </div>
+      <button mat-stroked-button color="primary" class="add-card-btn" (click)="addToCard()">
+        添加卡片
+      </button>
     </div>
     @if ((item().examples ?? []).length) {
       <mat-expansion-panel class="example-panel">

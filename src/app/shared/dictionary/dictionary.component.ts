@@ -1,21 +1,24 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { Definition } from './dictionary-interface';
+import { DictionarySelectionService } from './selection/selection.service';
 import { MeaningCardComponent } from './sub-components/meaning-card.component';
+import Logger from 'electron-log/renderer';
 
 @Component({
-  selector: 'app-dictionary',
-  imports: [
-    MatCardModule,
-    MatIconModule,
-    MatDividerModule,
-    MatButtonModule,
-    MeaningCardComponent
-  ],
-  templateUrl: './dictionary.component.html',
-  styleUrl: './dictionary.component.scss',
+    selector: 'app-dictionary',
+    imports: [
+        MatCardModule,
+        MatIconModule,
+        MatDividerModule,
+        MatButtonModule,
+        MeaningCardComponent
+    ],
+    templateUrl: './dictionary.component.html',
+    styleUrl: './dictionary.component.scss',
 })
 export class DictionaryComponent {
     private readonly selectionService = inject(DictionarySelectionService);
@@ -28,20 +31,24 @@ export class DictionaryComponent {
         return this.selectionService.selection().contextSentence || 'PLACEHOLDER_CONTEXT_SENTENCE';
     }
 
-  readonly entry = {
-    word: 'run',
-    phoneticSymbol: ['/rʌn/', '/rʌn/'],
-    senses: [
-      {
-        partOfSpeech: 'verb',
-        definitions: [
-          {
-            cefr: 'A1 [ I or T ]',
-            definition: {
+    onAddCard(definition: Definition, partOfSpeech: string): void {
+        Logger.info('add card', { partOfSpeech, definition });
+    }
+
+    readonly entry = {
+        word: 'run',
+        phoneticSymbol: ['/rʌn/', '/rʌn/'],
+        senses: [
+            {
+                partOfSpeech: 'verb',
+                definitions: [
+                    {
+                        cefr: 'A1 [ I or T ]',
+                        definition: {
                             source: '(of people and some animals) to move along, faster than walking, by taking quick steps in which each foot is lifted before the next foot touches the ground',
-              target: '跑，奔跑',
-            },
-            examples: [
+                            target: '跑，奔跑',
+                        },
+                        examples: [
                             {
                                 source: 'The children had to run to keep up with their father.',
                                 target: '孩子们得一路跑着才能跟上他们的父亲。',
@@ -54,10 +61,10 @@ export class DictionaryComponent {
                                 source: 'The sheep ran away/off in fright.',
                                 target: '羊受惊跑掉了。',
                             },
-              {
-                source: 'A little girl ran up to (= came quickly beside) me, crying for her daddy.',
-                target: '一个小女孩跑到我身边，哭着让我替她找爸爸。',
-              },
+                            {
+                                source: 'A little girl ran up to (= came quickly beside) me, crying for her daddy.',
+                                target: '一个小女孩跑到我身边，哭着让我替她找爸爸。',
+                            },
                             {
                                 source: 'In the semi-final she will be running against her nearest rival.',
                                 target: '半决赛中，她将与水平最接近自己的对手一决高下。',
@@ -66,40 +73,40 @@ export class DictionaryComponent {
                                 source: 'The first two races will be run (= will happen) in 20 minutes.',
                                 target: '头两个赛跑项目将在20分钟后举行。',
                             },
-            ],
-          },
-          {
-            cefr: '[ T ]',
-            definition: {
-              source: 'If you run an animal in a race, you cause it to take part.',
-              target: '使（狗、马等）参加比赛;赛（狗、马等）',
-            },
-            examples: [
+                        ],
+                    },
+                    {
+                        cefr: '[ T ]',
+                        definition: {
+                            source: 'If you run an animal in a race, you cause it to take part.',
+                            target: '使（狗、马等）参加比赛;赛（狗、马等）',
+                        },
+                        examples: [
                             {
                                 source: 'Thompson Stables are running three horses in the next race.',
                                 target: '汤普森赛马训练公司将派出3匹马参加下一场比赛。',
                             },
-            ],
-          },
-          {
-            cefr: '[ I + adv/prep ]',
+                        ],
+                    },
+                    {
+                        cefr: '[ I + adv/prep ]',
                         definition: {
                             source: 'to go quickly or in a hurry',
                             target: '赶快;迅速赶往;匆忙跑（到某地方）',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: 'Would you run to the post office and get me some stamps?',
                                 target: '你能不能赶快到邮局给我买一些邮票来？',
                             },
-              {
-                source: "You don't put on weight when you spend all day running around after small children.",
-                target: '你整天不歇脚地跟在小孩们后面转是胖不起来的。',
-              },
-            ],
-          },
-          {
-            cefr: '',
+                            {
+                                source: "You don't put on weight when you spend all day running around after small children.",
+                                target: '你整天不歇脚地跟在小孩们后面转是胖不起来的。',
+                            },
+                        ],
+                    },
+                    {
+                        cefr: '',
                         definition: {
                             source: 'to run fast in order to get or avoid something',
                             target: '奔跑追赶;赶抢;快跑躲避',
@@ -110,9 +117,9 @@ export class DictionaryComponent {
                                 target: '我跑着去赶公共汽车，但是车却开走了。',
                             },
                         ],
-          },
-          {
-            cefr: '',
+                    },
+                    {
+                        cefr: '',
                         definition: {
                             source: 'to move your legs as if running, while you stay in one place',
                             target: '原地踏步跑',
@@ -123,30 +130,30 @@ export class DictionaryComponent {
                                 target: '我在开始训练前原地踏步跑做准备活动。',
                             },
                         ],
-          },
-          {
-            cefr: 'B2 [ I or T,  usually + adv/prep ]',
-            definition: {
-              source: 'to (cause something to) travel, move, or continue in a particular way',
-              target: '（使）行进，（使）行驶，（使）移动；（使）持续',
-            },
-            examples: [
+                    },
+                    {
+                        cefr: 'B2 [ I or T,  usually + adv/prep ]',
+                        definition: {
+                            source: 'to (cause something to) travel, move, or continue in a particular way',
+                            target: '（使）行进，（使）行驶，（使）移动；（使）持续',
+                        },
+                        examples: [
                             {
                                 source: 'Trains are still running, despite the snow.',
                                 target: '尽管下了雪，列车仍在运行。',
                             },
-              {
-                source: 'A bus runs (= goes on a particular route at particular times) three times a day into town.',
-                target: '有一趟公共汽车每天3次开往城里。',
-              },
-              {
-                source: 'Skis are waxed on the bottom so that they run smoothly over the snow.',
-                target: '滑雪板底部打了蜡，这样就能在雪上滑得顺畅自如。',
-              },
-              {
-                source: 'The route/railway/road runs (= goes) across the border/into Italy/through the mountains.',
-                target: '这条路线／铁道／公路穿过国界／通向意大利境内／在群山中穿行。',
-              },
+                            {
+                                source: 'A bus runs (= goes on a particular route at particular times) three times a day into town.',
+                                target: '有一趟公共汽车每天3次开往城里。',
+                            },
+                            {
+                                source: 'Skis are waxed on the bottom so that they run smoothly over the snow.',
+                                target: '滑雪板底部打了蜡，这样就能在雪上滑得顺畅自如。',
+                            },
+                            {
+                                source: 'The route/railway/road runs (= goes) across the border/into Italy/through the mountains.',
+                                target: '这条路线／铁道／公路穿过国界／通向意大利境内／在群山中穿行。',
+                            },
                             {
                                 source: 'A climbing rose bush runs (= grows) up the side of the door.',
                                 target: '一丛攀缘蔷薇盘绕在门侧。',
@@ -207,15 +214,15 @@ export class DictionaryComponent {
                                 source: 'He ran (= pushed) his fingers through his hair and looked up at me.',
                                 target: '他用手梳拢了一下头发，抬头看我。',
                             },
-            ],
-          },
-          {
-            cefr: 'B2 [ I or T ]',
+                        ],
+                    },
+                    {
+                        cefr: 'B2 [ I or T ]',
                         definition: {
                             source: 'to (cause something to) operate',
                             target: '（使）运转;（使）运作;（使）运行;操作',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: "Keep clear of the machines while they're running.",
                                 target: '机器运转时不要靠近。',
@@ -228,14 +235,14 @@ export class DictionaryComponent {
                                 source: 'Do you know how to run this sort of machinery?',
                                 target: '你会操作这种机器吗？',
                             },
-              {
-                source: 'The mechanic asked me to run the engine (= switch it on and allow it to work) for a minute.',
-                target: '修车工人让我发动引擎转一分钟。',
-              },
-              {
-                source: 'They had the new computer system up and running (= working) within an hour.',
-                target: '他们一小时之内就使新的计算机系统运行起来了。',
-              },
+                            {
+                                source: 'The mechanic asked me to run the engine (= switch it on and allow it to work) for a minute.',
+                                target: '修车工人让我发动引擎转一分钟。',
+                            },
+                            {
+                                source: 'They had the new computer system up and running (= working) within an hour.',
+                                target: '他们一小时之内就使新的计算机系统运行起来了。',
+                            },
                             {
                                 source: "We've run the computer program, but nothing happens.",
                                 target: '我们已经运行了这个计算机程序，但是没有起作用。',
@@ -248,19 +255,19 @@ export class DictionaryComponent {
                                 source: 'The football team asked the coach which play they should run next.',
                                 target: '',
                             },
-            ],
-          },
-          {
-            cefr: 'B1 [ T ]',
+                        ],
+                    },
+                    {
+                        cefr: 'B1 [ T ]',
                         definition: {
                             source: 'to be in control of something',
                             target: '经营；管理；开办',
                         },
-            examples: [
-              {
-                source: "He's been running a restaurant/his own company since he left school.",
-                target: '他毕业后就一直在经营自己的饭店／公司。',
-              },
+                        examples: [
+                            {
+                                source: "He's been running a restaurant/his own company since he left school.",
+                                target: '他毕业后就一直在经营自己的饭店／公司。',
+                            },
                             {
                                 source: 'The local college runs (= provides) a course in self-defence.',
                                 target: '当地的一所大学开了一门自我防卫课。',
@@ -269,10 +276,10 @@ export class DictionaryComponent {
                                 source: 'a well-run/badly-run organization/business/course',
                                 target: '管理良好／不善的组织；经营良好／很差的公司；设置得很好／差的课程',
                             },
-            ],
-          },
-          {
-            cefr: '',
+                        ],
+                    },
+                    {
+                        cefr: '',
                         definition: {
                             source: 'to control a business or other organization firmly and effectively',
                             target: '牢牢控制，有效的严格管理',
@@ -283,9 +290,9 @@ export class DictionaryComponent {
                                 target: '露丝执行了有效的严格管理，员工没有办法开小差。',
                             },
                         ],
-          },
-          {
-            cefr: '[ T ]',
+                    },
+                    {
+                        cefr: '[ T ]',
                         definition: {
                             source: 'If you run a car, you own one, drive it, and pay for the costs.',
                             target: '拥有（自己的车）；养（车）',
@@ -296,9 +303,9 @@ export class DictionaryComponent {
                                 target: '我养不起车。',
                             },
                         ],
-          },
-          {
-            cefr: '[ T ]',
+                    },
+                    {
+                        cefr: '[ T ]',
                         definition: {
                             source: 'to organize the way you live or work',
                             target: '安排（生活或工作）',
@@ -309,14 +316,14 @@ export class DictionaryComponent {
                                 target: '一些人按照星体的运行规律来安排自己的生活。',
                             },
                         ],
-          },
-          {
-            cefr: 'B2 [ I or T ]',
-            definition: {
-              source: 'to (cause something to) flow or produce liquid',
-              target: '（使）流动;（使）流出;（使）排出;（尤指衣服的颜色）褪色，扩散，渗色',
-            },
-            examples: [
+                    },
+                    {
+                        cefr: 'B2 [ I or T ]',
+                        definition: {
+                            source: 'to (cause something to) flow or produce liquid',
+                            target: '（使）流动;（使）流出;（使）排出;（尤指衣服的颜色）褪色，扩散，渗色',
+                        },
+                        examples: [
                             {
                                 source: 'I can feel trickles of sweat running down my neck.',
                                 target: '我可以感觉到津津汗水顺着脖子往下流淌。',
@@ -349,36 +356,36 @@ export class DictionaryComponent {
                                 source: 'My nose and eyes have been running all week because of hay fever.',
                                 target: '我得了干草热，一星期都在流鼻涕淌眼泪。',
                             },
-              {
-                source: 'After twelve hours at her computer, the words began to run into one another (= seem mixed together).',
-                target: '她在文字处理机前工作了12小时后，看屏幕上的字都觉得模糊一片了。',
-              },
-            ],
-          },
-          {
-            cefr: '[ I or T ]',
+                            {
+                                source: 'After twelve hours at her computer, the words began to run into one another (= seem mixed together).',
+                                target: '她在文字处理机前工作了12小时后，看屏幕上的字都觉得模糊一片了。',
+                            },
+                        ],
+                    },
+                    {
+                        cefr: '[ I or T ]',
                         definition: {
                             source: '(of colours in clothes, etc.) to come out or spread',
                             target: '（衣服的颜色）褪色，扩散，渗色',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: 'I must have washed my dress at too high a temperature, because the colour has run.',
                                 target: '我洗这件裙子时用的水肯定太热了，因为都褪色了。',
                             },
-              {
-                source: "If the first layer isn't dry before you add the next one, the colours will run into each other (= mix).",
-                target: '如果第一层没有干就涂上第二层，那两层的颜色就会渗在一起。',
-              },
-            ],
-          },
-          {
-            cefr: '[ L only + adj ]',
+                            {
+                                source: "If the first layer isn't dry before you add the next one, the colours will run into each other (= mix).",
+                                target: '如果第一层没有干就涂上第二层，那两层的颜色就会渗在一起。',
+                            },
+                        ],
+                    },
+                    {
+                        cefr: '[ L only + adj ]',
                         definition: {
                             source: 'to be or become',
                             target: '变得；变成；成为',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: 'Differences between the two sides run deep (= are serious).',
                                 target: '双方的分歧加剧了。',
@@ -395,28 +402,28 @@ export class DictionaryComponent {
                                 source: "We're beginning to run short of money/Money is beginning to run short (= there's not much left).",
                                 target: '我们的钱快花完了／钱快花完了。',
                             },
-            ],
-          },
-          {
-            cefr: '[ I ] (UK also ladder)',
-            definition: {
-              source: 'If tights (= thin clothing that covers the legs) run, a long, thin hole appears in them.',
-              target: '（连裤袜或长筒袜上的）脱线，抽丝',
-            },
+                        ],
+                    },
+                    {
+                        cefr: '[ I ] (UK also ladder)',
+                        definition: {
+                            source: 'If tights (= thin clothing that covers the legs) run, a long, thin hole appears in them.',
+                            target: '（连裤袜或长筒袜上的）脱线，抽丝',
+                        },
                         examples: [
                             {
                                 source: 'Oh no, my tights have run!',
                                 target: '哎呀，糟了，我的连裤袜抽丝了！',
                             },
                         ],
-          },
-          {
-            cefr: 'C1 [ T ]',
+                    },
+                    {
+                        cefr: 'C1 [ T ]',
                         definition: {
                             source: 'to show something in a newspaper or magazine, on television, etc.',
                             target: '发表，刊登;播出',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: 'All the newspapers ran (= printed) stories about the new peace talks.',
                                 target: '所有报纸都刊登了新一轮和谈的消息。',
@@ -425,10 +432,10 @@ export class DictionaryComponent {
                                 source: 'Channel 4 is running a series on the unfairness of the legal system.',
                                 target: '第四频道正在播出揭露法律体系不公正之处的系列节目。',
                             },
-            ],
-          },
-          {
-            cefr: '[ I ] Indian English',
+                        ],
+                    },
+                    {
+                        cefr: '[ I ] Indian English',
                         definition: {
                             source: 'If a film is running at a particular place, you can see it there.',
                             target: '（电影在某处）放映',
@@ -439,14 +446,14 @@ export class DictionaryComponent {
                                 target: '这周Metro电影院在放什么电影？',
                             },
                         ],
-          },
-          {
-            cefr: '[ I ]',
+                    },
+                    {
+                        cefr: '[ I ]',
                         definition: {
                             source: 'to compete as a candidate in an election',
                             target: '参加竞选',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: 'Mrs Thatcher wanted to run a fourth time.',
                                 target: '撒切尔夫人想要第四次参加竞选。',
@@ -455,23 +462,23 @@ export class DictionaryComponent {
                                 source: "He's going to run against Smith/for president/for re-election.",
                                 target: '他将要和史密斯作为对手进行竞选／竞选总统／竞选连任。',
                             },
-            ],
-          },
-          {
-            cefr: '',
-            definition: {
-              source: 'to compete as a candidate in an election for a position of authority and responsibility in a government or other organization',
-              target: '参加竞选',
-            },
+                        ],
+                    },
+                    {
+                        cefr: '',
+                        definition: {
+                            source: 'to compete as a candidate in an election for a position of authority and responsibility in a government or other organization',
+                            target: '参加竞选',
+                        },
                         examples: [
                             {
                                 source: 'She is considering running for office.',
                                 target: '她正在考虑参加竞选。',
                             },
                         ],
-          },
-          {
-            cefr: '[ T ]',
+                    },
+                    {
+                        cefr: '[ T ]',
                         definition: {
                             source: 'to take guns or drugs illegally from one place to another',
                             target: '走私，非法携带（枪支或毒品）',
@@ -482,19 +489,19 @@ export class DictionaryComponent {
                                 target: '他因为越境向美国走私毒品而被捕。',
                             },
                         ],
-          },
-        ],
-      },
-      {
-        partOfSpeech: 'noun',
-        definitions: [
-          {
-            cefr: 'B1 [ C ]',
+                    },
+                ],
+            },
+            {
+                partOfSpeech: 'noun',
+                definitions: [
+                    {
+                        cefr: 'B1 [ C ]',
                         definition: {
                             source: 'the action of running, especially for exercise',
                             target: '跑，奔跑;（尤指为了锻炼而进行的）跑步',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: 'We go for/do a three-mile run every evening after work.',
                                 target: '我们每天傍晚下班后都会跑上3英里。',
@@ -503,15 +510,15 @@ export class DictionaryComponent {
                                 source: "If you set off at a run (= running), you'll be exhausted later.",
                                 target: '如果你一开始就跑，过些时候你就会筋疲力尽的。',
                             },
-            ],
-          },
-          {
-            cefr: '[ C ]',
+                        ],
+                    },
+                    {
+                        cefr: '[ C ]',
                         definition: {
                             source: 'a journey',
                             target: '行程，航程',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: 'The number of aircraft on the New York-Moscow run is being increased.',
                                 target: '纽约—莫斯科之间的航线正在增加航班。',
@@ -524,15 +531,15 @@ export class DictionaryComponent {
                                 source: 'The plane swooped in on its bombing run.',
                                 target: '飞机猛然俯冲下来轰炸。',
                             },
-            ],
-          },
-          {
-            cefr: '[ C ]',
+                        ],
+                    },
+                    {
+                        cefr: '[ C ]',
                         definition: {
                             source: 'the period during which a play is performed',
                             target: '（一部戏的）连续上演（期）',
                         },
-            examples: [
+                        examples: [
                             {
                                 source: "The musical's London run was a disaster.",
                                 target: '该音乐剧在伦敦的演出彻底失败。',
@@ -541,10 +548,10 @@ export class DictionaryComponent {
                                 source: "They're doing a run at the Cambridge Playhouse.",
                                 target: '他们正在多玛仓库剧院进行连续演出。',
                             },
-            ],
-          },
-          {
-            cefr: '[ C usually singular ]',
+                        ],
+                    },
+                    {
+                        cefr: '[ C usually singular ]',
                         definition: {
                             source: 'a situation in which many people suddenly buy a particular product',
                             target: '抢购；争购',
@@ -555,9 +562,9 @@ export class DictionaryComponent {
                                 target: '就因为这场雨，大家都在抢购雨伞。',
                             },
                         ],
-          },
-          {
-            cefr: '[ C usually singular ]',
+                    },
+                    {
+                        cefr: '[ C usually singular ]',
                         definition: {
                             source: 'a situation in which many people suddenly sell a particular product',
                             target: '抛售',
@@ -568,9 +575,9 @@ export class DictionaryComponent {
                                 target: '突然出现的抛售导致美元贬值。',
                             },
                         ],
-          },
-          {
-            cefr: 'C2',
+                    },
+                    {
+                        cefr: 'C2',
                         definition: {
                             source: 'A run of something is a continuous period during which it lasts or is repeated.',
                             target: '一连串',
@@ -581,9 +588,9 @@ export class DictionaryComponent {
                                 target: '一个又一个的成功／一连串的失败／厄运连连',
                             },
                         ],
-          },
-          {
-            cefr: '',
+                    },
+                    {
+                        cefr: '',
                         definition: {
                             source: 'the usual type of something',
                             target: '（某物的）普通类型，一般货色',
@@ -594,9 +601,9 @@ export class DictionaryComponent {
                                 target: '他们的饭菜是一般宾馆饭菜的水平',
                             },
                         ],
-          },
-          {
-            cefr: '[ C ]',
+                    },
+                    {
+                        cefr: '[ C ]',
                         definition: {
                             source: 'an area of ground of limited size for keeping animals',
                             target: '饲养场；牧场',
@@ -607,14 +614,14 @@ export class DictionaryComponent {
                                 target: '牧羊场／养鸡场',
                             },
                         ],
-          },
-          {
-            cefr: 'B2 [ C ]',
-            definition: {
-              source: 'in cricket and baseball, a single point, scored by running from one place to another',
-              target: '（板球或棒球中的）一分',
-            },
-            examples: [
+                    },
+                    {
+                        cefr: 'B2 [ C ]',
+                        definition: {
+                            source: 'in cricket and baseball, a single point, scored by running from one place to another',
+                            target: '（板球或棒球中的）一分',
+                        },
+                        examples: [
                             {
                                 source: 'England need 105 runs to win the game.',
                                 target: '英格兰队需要得到105分才能赢得比赛。',
@@ -623,10 +630,10 @@ export class DictionaryComponent {
                                 source: 'The pitcher allowed three runs in just two innings.',
                                 target: '',
                             },
-            ],
-          },
-          {
-            cefr: '[ C ] (UK also ladder)',
+                        ],
+                    },
+                    {
+                        cefr: '[ C ] (UK also ladder)',
                         definition: {
                             source: 'a long, vertical hole in tights and stockings',
                             target: '（连裤袜或长筒袜上的）脱线，抽丝',
@@ -637,17 +644,17 @@ export class DictionaryComponent {
                                 target: '我的连裤袜被椅子上的钉子刮了一下，抽丝了。',
                             },
                         ],
-          },
-          {
-            cefr: '',
-            definition: {
-              source: 'a condition of the bowels in which the contents are passed out of the body too often and in a form that is too liquid',
-              target: '拉肚子，腹泻，跑肚',
+                    },
+                    {
+                        cefr: '',
+                        definition: {
+                            source: 'a condition of the bowels in which the contents are passed out of the body too often and in a form that is too liquid',
+                            target: '拉肚子，腹泻，跑肚',
+                        },
+                        examples: [],
+                    },
+                ],
             },
-            examples: [],
-          },
         ],
-      },
-    ],
-  };
+    };
 }
