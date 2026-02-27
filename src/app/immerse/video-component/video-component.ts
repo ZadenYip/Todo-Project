@@ -32,7 +32,7 @@ export class VideoComponent implements OnDestroy {
     private userPaused = false;
     subtitleOffsetTip = '';
     translate = inject(TranslateService);
-    displaySubtitles = computed<string[]>(() => {
+    readonly displaySubtitles = computed<string[]>(() => {
         const subtitles: string[] = [];
         for (const id of this.subtitleService.videoActiveIDs()) {
             const subtitleItem = this.subtitleService.getSubtitle(id);
