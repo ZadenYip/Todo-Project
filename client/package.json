@@ -25,7 +25,6 @@
   "main": "app/main.js",
   "private": true,
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
     "start": "pnpm --parallel run electron:serve ng:serve",
     "ng:serve": "ng serve -c dev -o --open=false",
