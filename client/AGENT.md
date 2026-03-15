@@ -4,6 +4,7 @@
 - 项目类型: 桌面应用（Angular 渲染进程 + Electron 主进程）
 - 前端: Angular 21, TypeScript, SCSS, Angular Material
 - 桌面层: Electron 39
+- 数据库: better-sqlite3，DrizzleORM
 - Node 能力: better-sqlite3, 文件系统, 日志
 - 测试: Vitest（Angular + Electron 单测）, Playwright（E2E）
 
